@@ -1,4 +1,4 @@
-// /server/models/Team.php
+<?php
 class Team {
     public $id;
     public $name;
@@ -8,3 +8,4 @@ class Team {
         $this->name = $name;
     }
 }
+?>

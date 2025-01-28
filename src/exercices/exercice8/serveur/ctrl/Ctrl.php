@@ -1,5 +1,6 @@
+<?php
 // /server/controllers/Ctrl.php
-require_once 'Wrk.php';
+require_once 'wrk/Wrk.php';
 
 class Ctrl {
     private $wrk;
@@ -31,3 +32,4 @@ class Ctrl {
         return $xml->asXML();
     }
 }
+?>

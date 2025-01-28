@@ -1,4 +1,5 @@
-// /server/models/Player.php
+<?php
+// /s/Player.php
 class Joueur {
     public $id;
     public $name;
@@ -12,3 +13,4 @@ class Joueur {
         $this->team_id = $team_id;
     }
 }
+?>

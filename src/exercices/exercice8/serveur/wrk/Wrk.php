@@ -1,7 +1,8 @@
+<?php
 // /server/controllers/Wrk.php
 require_once 'config/Database.php';
-require_once 'models/Player.php';
-require_once 'models/Team.php';
+require_once 'beans/Joueur.php';
+require_once 'beans/Equipe.php';
 
 class Wrk {
     private $conn;
@@ -17,7 +18,7 @@ class Wrk {
         $stmt->execute();
         $teams = [];
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $teams[] = new Team($row['PK_equipe'], $row['Nom']);
+            $teams[] = new Equipe($row['PK_equipe'], $row['Nom']);
         }
         return $teams;
     }
@@ -29,8 +30,9 @@ class Wrk {
         $stmt->execute();
         $players = [];
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $players[] = new Player($row['PK_joueur'], $row['Nom'], $row['Points'], $row['FK_equipe']);
+            $players[] = new Joueur($row['PK_joueur'], $row['Nom'], $row['Points'], $row['FK_equipe']);
         }
         return $players;
     }
 }
+?>
