@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 	{
 		// effacer la variable de session et écrire <result>true</result>
 		unset($_SESSION['logged']);
-
+		session_destroy(); 
 		echo '<result>true</result>';
 	}
 }
