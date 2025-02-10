@@ -1,5 +1,73 @@
-<html>
-  <body>
-    <h1>Hello world</h1>
-  </body>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Note Manager</title>
+  <link rel="stylesheet" href="./stylesheets/styles.css">
+</head>
+
+<body>
+  <div class="background-layer"></div>
+
+  <div class="container">
+    <!-- Header with Login Button -->
+    <div class="header">
+      <h1 class="header-title">My Notes</h1>
+      <div class="auth-buttons">
+        <a href="http://localhost:8080/projet/client/newNote.html#" class="new-note-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="8" x2="12" y2="16" />
+            <line x1="8" y1="12" x2="16" y2="12" />
+          </svg>
+          New Note
+        </a>
+        <a href="http://localhost:8080/projet/client/index.html#" class="login-btn">Login</a>
+      </div>
+    </div>
+
+    <!-- Notes Grid -->
+    <div class="notes-grid">
+      <!-- Note Card 1 -->
+      <div class="note-card">
+        <div class="note-header">
+          <h2 class="note-title">Welcome Note</h2>
+          <span class="note-date">2025-02-10</span>
+        </div>
+        <p class="note-preview">Welcome to your note manager. This is a sample note to help you get started with your
+          personal note-taking journey...</p>
+        <div class="note-footer">
+          <button class="like-button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2">
+              <path
+                d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+              </path>
+            </svg>
+            Like
+          </button>
+          <span class="creation-date">Created: 2025-02-10</span>
+        </div>
+      </div>
+
+      <!-- Note Card 2-6 would follow the same structure -->
+      <!-- For brevity, I'm omitting the additional cards -->
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms and Conditions</a>
+        <a href="#">Report a Note</a>
+    </div>
+    <div class="footer-copyright">
+        NoteManager@20
+    </div>
+</footer>
+</body>
+
 </html>
