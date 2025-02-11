@@ -4,89 +4,55 @@
  */
 
 /**
- * Méthode appelée lors du retour avec succès de la liste des pays
+ * Méthode appelée lors du retour avec succès de la liste des notes
  * @param {type} data
  * @param {type} text
  * @param {type} jqXHR
  * @returns {undefined}
  */
-function chargerPaysSuccess(data, text, jqXHR)
-{   
-	var cmbPays = document.getElementById("cmbPays");
-    $(data).find("pays").each(function() {
-      var pays = new Pays();
-      pays.setNom($(this).find("nom").text());
-      pays.setPk($(this).find("pk_pays").text());
-	  cmbPays.options[cmbPays.options.length] = new Option(pays, JSON.stringify(pays));
-    });  
+function chargerNotesSuccess(data, text, jqXHR) {   
+  var notesGrid = document.getElementById("notes-grid"); // Get the container for notes
+  var templateCard = document.querySelector(".note-card.template-card"); // Get the template card
+  
+  // Loop through all notes in the XML
+  $(data).find("note").each(function() {
+    var title = $(this).find("title").text(); // Get the title of the note
+    var message = $(this).find("message").text(); // Get the message of the note
+    var date = $(this).find("date").text(); // Get the date of the note
+    
+    // Clone the template card and fill it with data
+    var noteCard = templateCard.cloneNode(true); // Clone the template
+    noteCard.style.display = "block"; // Make it visible
+    
+    // Update the card with the note's data
+    noteCard.querySelector(".note-title").textContent = title;
+    noteCard.querySelector(".note-date").textContent = date;
+    noteCard.querySelector(".note-preview").textContent = message.length > 100 ? message.substring(0, 100) + "..." : message;
+    noteCard.querySelector(".creation-date").textContent = "Created: " + date;
+
+    // Append the new note card to the notes grid
+    notesGrid.appendChild(noteCard);
+  });
 }
 
 /**
- * Méthode appelée lors du retour avec succès de la liste des skieurs
- * @param {type} data
- * @param {type} text
- * @param {type} jqXHR
- * @returns {undefined}
- */
-function chargerSkieursSuccess(data, text, jqXHR)
-{   
-    var txt = '';
-    $(data).find("skieur").each(function() {
-        var skieur = new Skieur();
-        skieur.setNom($(this).find("nom").text());
-        skieur.setPosition($(this).find("position").text());
-        txt = txt + "<tr><td>" + skieur.getPosition() + "</td><td>" + skieur.toString() + "</td></tr>";
-
-    });  
-    document.getElementById("tableContent").innerHTML = txt;
-}
-
-/**
- * Méthode appelée en cas d'erreur lors de la lecture des pays
+ * Méthode appelée en cas d'erreur lors de la lecture des notes
  * @param {type} request
  * @param {type} status
  * @param {type} error
  * @returns {undefined}
  */
-function chargerPaysError(request, status, error) {
-  alert("Erreur lors de la lecture des pays: " + error);
-}
-
-/**
- * Méthode appelée en cas d'erreur lors de la lecture des skieurs
- * @param {type} request
- * @param {type} status
- * @param {type} error
- * @returns {undefined}
- */
-function chargerSkieursError(request, status, error) {
-  alert("Erreur lors de la lecture des skieurs: " + error);
+function chargerNotesError(request, status, error) {
+  alert("Erreur lors de la lecture des notes: " + error);
 }
 
 /**
  * Méthode "start" appelée après le chargement complet de la page
  */
 $(document).ready(function() {
-  var cmbPays = $("#cmbPays");
-  var pays = '';
-
-  $.getScript("javascripts/helpers/dateHelper.js", function() {
-    console.log("dateHelper.js chargé !");
-  });
-  $.getScript("javascripts/beans/pays.js", function() {
-    console.log("pays.js chargé !");
-  });
-  $.getScript("javascripts/beans/skieur.js", function() {
-    console.log("skieur.js chargé !");
-  });
+  // Call the function to load notes when the page is ready
   $.getScript("javascripts/services/servicesHttp.js", function() {
     console.log("servicesHttp.js chargé !");
-    chargerPays(chargerPaysSuccess, chargerPaysError);
+    chargerNotes(chargerNotesSuccess, chargerNotesError); // Load notes from server
   });
-  cmbPays.change(function(event) {
-    pays = this.options[this.selectedIndex].value;
-    chargerSkieurs(JSON.parse(pays).pk, chargerSkieursSuccess, chargerSkieursError);
-  });
-
 });
-

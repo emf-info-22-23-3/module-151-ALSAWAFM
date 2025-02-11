@@ -1,50 +1,50 @@
 <?php 
-	include_once('workers/deputesBDManager.php');
+	include_once('workers/DBNoteManager.php');
     
     if (isset($_SERVER['REQUEST_METHOD']))
 	{
 		switch ($_SERVER['REQUEST_METHOD'])
 		{
 			case 'GET':
-				if (isset($_GET['Langue']))
+				if (isset($_GET['titel']))
 				{
-					$deputeBD = new deputesBDManager();
-					echo $deputeBD->GetInXML($_GET['Langue']);
+					$noteBD = new DBNoteManager();
+					echo $noteBD->GetInXML(titel: $_GET['titel']);
 				}
 				else{
-					echo 'Paramètre Langue manquant';
+					echo 'Paramètre titel manquant';
 				}
 				break;
 			case 'POST':
-				if (isset($_POST['Langue']) and isset($_POST['Nom']))
+				if (isset($_POST['titel']) and isset($_POST['message'])and isset($_POST['date'])and isset($_POST['fk_category']))
 				{
-					$deputeBD = new deputesBDManager();
-					echo $deputeBD->Add($_POST['Nom'], $_POST['Langue']);
+					$noteBD = new DBNoteManager();
+					echo $noteBD->Add(titel: $_POST['titel'], message: $_POST['message'],date:  $_POST['date'],fk_category:  $_POST['fk_category']);
 				}
 				else{
-					echo 'Paramètre Langue ou Nom manquant';
+					echo 'Paramètre titel, message, date ou fk_category manquant';
 				}
 				break;
 			case 'PUT':
 				parse_str(file_get_contents("php://input"), $vars);
-				if (isset($vars['Langue']) and isset($vars['Nom']) and isset($vars['PK_Depute']))
+				if (isset($vars['titel']) and isset($vars['message'])and isset($vars['date'])and isset($vars['fk_category']))
 				{
-					$deputeBD = new deputesBDManager();
-					echo $deputeBD->Update($vars['PK_Depute'], $vars['Nom'], $vars['Langue']);
+					$noteBD = new DBNoteManager();
+					echo $noteBD->Update($vars['titel'], $vars['message'], $vars['date'], $vars['fk_category'], pk_note: $vars['pk_note']);
 				}
 				else{
-					echo 'Paramètre PK_Depute, Langue ou Nom manquant';
+					echo 'Paramètre pk_note, titel, message, date ou fk_category manquant';
 				}
 				break;
 			case 'DELETE':
 				parse_str(file_get_contents("php://input"), $vars);
-				if (isset($vars['PK_Depute']))
+				if (isset($vars['titel']))
 				{
-					$deputeBD = new deputesBDManager();
-					echo $deputeBD->Delete($vars['PK_Depute']);
+					$noteBD = new DBNoteManager();
+					echo $noteBD->Delete(titel: $vars['titel']);
 				}
 				else{
-					echo 'Paramètre PK_Depute manquant';
+					echo 'Paramètre titel manquant';
 				}
 				break;
 		}
