@@ -5,9 +5,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Note Manager</title>
-  <link rel="stylesheet" href="./stylesheets/index.css">
+  <link rel="stylesheet" href="./stylesheets/admin.css">
   <script type="text/javascript" src="javascripts/helpers/jquery-1.10.2.min.js"></script>
-  <script type="text/javascript" src="javascripts/controllers/indexCtrl.js"></script>
+  <script type="text/javascript" src="javascripts/controllers/adminCtrl.js"></script>
 
 </head>
 
@@ -29,6 +29,12 @@
           New Note
         </a>
         <a href="http://localhost:8080/projet/client/login.html" class="login-btn">Login</a>
+      
+        <button class="modify-btn">Modify</button>
+        <button class="save-btn">Save Changes</button>
+        <button class="disconnect-btn">Disconnect</button>
+        <button class="delete-btn">Delete</button>
+
       </div>
     </div>
 
@@ -42,6 +48,8 @@
         </div>
         <p class="note-preview"></p>
         <div class="note-footer">
+          <input type="checkbox" class="delete-checkbox" data-titel_note=""> <!-- Store pk_note as data attribute -->
+          <button class="like-button">
           <button class="like-button">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
               stroke="currentColor" stroke-width="2">

@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="./stylesheets/login.css">
     <script type="text/javascript" src="javascripts/helpers/jquery-1.10.2.min.js"></script>
     <script src="javascripts/services/servicesHttp.js"></script>
-    <script src="javascripts/controllers/indexCtrl.js"></script>
+    <script src="javascripts/controllers/loginCtrl.js"></script>
 
 </head>
 <body>
@@ -18,11 +18,11 @@
                 <h2>Welcome Back</h2>
                 <p>Login to continue to NoteApp</p>
             </div>
-            <input type="email" placeholder="Email Address" required>
-            <input type="password" placeholder="Password" required>
+            <input id="email" type="email" placeholder="Email Address" required>
+            <input id="password" type="password" placeholder="Password" required>
             
             <div class="action-buttons">
-                <button type="submit" class="login-btn">Login</button>
+                <button type="submit" class="login-btn" id="login-btn">Login</button>
                 <a href="http://localhost:8080/projet/client/index.html#" class="back-btn">Back to Homepage</a>
             </div>
                         

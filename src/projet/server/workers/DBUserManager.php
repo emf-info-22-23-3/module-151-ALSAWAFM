@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $db = Connexion::getInstance();
 
         // Prepare the query to check the user
-        $query = "SELECT * FROM users WHERE email = :email";
+        $query = "SELECT * FROM t_admin WHERE email = :email";
         $params = array(':email' => $email);
         $result = $db->selectSingleQuery($query, $params);
 

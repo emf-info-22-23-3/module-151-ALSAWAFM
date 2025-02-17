@@ -50,6 +50,40 @@ function chargerNotesError(request, status, error) {
 }
 
 
+/**
+ * Handle the click event for deleting selected notes.
+ */
+function handleDeleteSelected() {
+  var selectedNotes = getSelectedNotes();
+
+  if (selectedNotes.length > 0) {
+    deleteNotesFromServer(selectedNotes, function (response) {
+      console.log("Notes deleted successfully", response);
+      removeDeletedNotesFromUI();
+      alert("Selected notes deleted successfully!");
+    }, function (jqXHR, textStatus, errorThrown) {
+      console.log("Error deleting notes:", errorThrown);
+      alert("Error deleting selected notes. Please try again.");
+    });
+  } else {
+    alert("No notes selected for deletion.");
+  }
+}
+
+/**
+ * Get the list of selected notes by checking the checkboxes.
+ * @returns {Array} The list of selected note titles (or unique identifiers).
+ */
+function getSelectedNotes() {
+  var selectedNotes = [];
+
+  $(".delete-checkbox:checked").each(function () {
+    var titelNote = $(this).data("titel_note");  // Get the titel_note (or unique identifier)
+    selectedNotes.push(titelNote);
+  });
+
+  return selectedNotes;
+}
 
 
 /**
@@ -62,7 +96,7 @@ $(document).ready(function () {
     console.log("servicesHttp.js loaded!");
     chargerNotes(chargerNotesSuccess, chargerNotesError); // Load notes from server
   });
-
+  $('#delete-selected-btn').click(handleDeleteSelected);
 
 
 });

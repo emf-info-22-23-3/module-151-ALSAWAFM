@@ -27,7 +27,7 @@ function chargerNotes(successCallback, errorCallback) {
  * @param {type} Fonction de callback lors du retour avec succès de l'appel.
  * @param {type} Fonction de callback en cas d'erreur.
  */
-function connect(passwd, successCallback, errorCallback) {
+function connect(email, password, successCallback, errorCallback) {
   $.ajax({
       type: "POST",
       dataType: "xml",
@@ -56,5 +56,24 @@ function disconnect(successCallback, errorCallback) {
       data: 'action=disconnect',
       success: successCallback,
       error: errorCallback
+  });
+}
+
+
+
+/**
+ * Fonction permettant de demander la liste des notes au serveur.
+ * @param {type} Fonction de callback lors du retour avec succès de l'appel.
+ * @param {type} Fonction de callback en cas d'erreur.
+ */
+function deleteNotes(selectedNotes, successCallback, errorCallback) {
+
+  $.ajax({
+    type: "DELETE",
+    dataType: "xml",
+    url: BASE_URL + "main.php",
+    data:{ titel: selectedNotes },
+    success: successCallback,
+    error: errorCallback
   });
 }
