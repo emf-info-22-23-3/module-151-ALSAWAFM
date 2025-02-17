@@ -6,14 +6,9 @@
 		switch ($_SERVER['REQUEST_METHOD'])
 		{
 			case 'GET':
-				if (isset($_GET['titel']))
-				{
+				
 					$noteBD = new DBNoteManager();
-					echo $noteBD->GetInXML(titel: $_GET['titel']);
-				}
-				else{
-					echo 'Paramètre titel manquant';
-				}
+					echo $noteBD->GetInXML();
 				break;
 			case 'POST':
 				if (isset($_POST['titel']) and isset($_POST['message'])and isset($_POST['date'])and isset($_POST['fk_category']))

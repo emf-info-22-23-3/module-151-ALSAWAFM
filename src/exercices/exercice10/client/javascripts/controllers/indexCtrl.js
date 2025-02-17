@@ -11,7 +11,8 @@
  * @returns {undefined}
  */
 function chargerPaysSuccess(data, text, jqXHR)
-{   
+{     
+
 	var cmbPays = document.getElementById("cmbPays");
     $(data).find("pays").each(function() {
       var pays = new Pays();

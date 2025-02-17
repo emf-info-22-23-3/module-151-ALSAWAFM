@@ -18,22 +18,30 @@ class DBNoteManager
 	 * @param $titel La langue à laquelle rechercher les députés
 	 * @return liste de députés au format XML
 	 */
-	public function GetInXML($titel)
+	public function GetInXML()
 	{
-		$count = 0;
-		$params = array('titel' => $titel);
-		$query = connexion::getInstance()->SelectQuery("SELECT * from t_note where titel = :titel", $params);
+		// Remove the condition on 'titel' to get all records
+		$query = connexion::getInstance()->SelectQuery("SELECT * FROM t_note", []);
+	
+		// Start the XML response with <notes>
 		$result = '<notes>';
+	
+		// Loop through the result and construct XML for each note
 		foreach ($query as $data) {
-			$result = $result . '<notes>';
-			$result = $result . '<pk_note>' . $data['pk_note'] . '</pk_note>';
-			$result = $result . '<titel>' . $data['titel'] . '</titel>';
-			$result = $result . '<message>' . $data['message'] . '</message>';
-			$result = $result . '</note>';
+			$result .= '<note>';
+			$result .= '<pk_note>' . $data['pk_note'] . '</pk_note>';
+			$result .= '<titel>' . $data['titel'] . '</titel>';
+			$result .= '<message>' . $data['message'] . '</message>';
+			$result .= '<date>' . $data['date'] . '</date>';
+			$result .= '</note>';
 		}
-		$result = $result . '</notes>';
+	
+		// Close the <notes> tag and return the XML
+		$result .= '</notes>';
+	
 		return $result;
 	}
+	
 
 	/**
 	 * Ajoute un député à la liste des députés
