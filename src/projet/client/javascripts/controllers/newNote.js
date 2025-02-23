@@ -23,16 +23,16 @@ function fetchCategories() {
 
 
 function getNoteFormData() {
-  var titel = $("input[name='titel']").val().trim();
+  var title = $("input[name='title']").val().trim();
   var message = $("textarea[name='message']").val().trim();
   var fk_category = $("select[name='fk_category']").val(); // Get selected category ID
 
-  if (!titel || !message || !fk_category) {
+  if (!title || !message || !fk_category) {
       return null;
   }
 
   return {
-    titel: titel,
+    title: title,
       message: message,
       fk_category: fk_category
   };
@@ -56,7 +56,7 @@ function handlePublishNoteClick(e) {
   var currentTime = now.toTimeString().split(" ")[0]; // HH:MM:SS
 
   console.log("Sending data to addNote:", {
-      title: noteData.titel,
+      title: noteData.title,
       message: noteData.message,
       date: currentDate,
       time: currentTime,
@@ -64,7 +64,7 @@ function handlePublishNoteClick(e) {
   });
 
   addNote(
-      noteData.titel,
+      noteData.title,
       noteData.message,
       currentDate,
       currentTime,

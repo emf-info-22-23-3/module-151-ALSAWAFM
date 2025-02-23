@@ -19,7 +19,7 @@ function chargerNotesSuccess(data, text, jqXHR) {
 
   // Loop through all notes in the XML
   $(data).find("note").each(function () {
-    var title = $(this).find("titel").text(); // Get the title of the note
+    var title = $(this).find("title").text(); // Get the title of the note
     var message = $(this).find("message").text(); // Get the message of the note
     var date = $(this).find("date").text(); // Get the date of the note
     var time = $(this).find("time").text(); // Get the date of the note

@@ -94,21 +94,6 @@ body {
     box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
 }
 
-/* Login Button */
-.login-btn {
-    background: transparent;
-    border: 2px solid #2575fc;
-    color: #2575fc;
-    text-decoration: none;
-    padding: 10px 20px;
-    border-radius: 25px;
-    transition: all 0.3s ease;
-}
-
-.login-btn:hover {
-    background: #2575fc;
-    color: white;
-}
 
 /* Notes Grid */
 .notes-grid {

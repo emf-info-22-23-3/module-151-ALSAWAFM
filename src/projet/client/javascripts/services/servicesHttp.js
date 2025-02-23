@@ -52,7 +52,7 @@ function disconnect(successCallback, errorCallback) {
   $.ajax({
       type: "POST",
       dataType: "xml",
-      url: BASE_URL+ workers/DBUserManager.php,
+      url: BASE_URL+ "workers/DBUserManager.php",
       data: 'action=disconnect',
       success: successCallback,
       error: errorCallback
@@ -80,20 +80,20 @@ function deleteNotes(selectedNotes, successCallback, errorCallback) {
 
 /**
  * Function to add a new note.
- * @param {string} titel - Title of the note.
+ * @param {string} title - Title of the note.
  * @param {string} message - Message of the note.
  * @param {string} date - Date for the note.
  * @param {string} fk_category - The category of the note.
  * @param {function} successCallback - Called on success.
  * @param {function} errorCallback - Called on error.
  */
-function addNote(titel, message, date,time, fk_category, successCallback, errorCallback) {
+function addNote(title, message, date,time, fk_category, successCallback, errorCallback) {
   $.ajax({
     type: "POST",
     dataType: "xml",  // Expecting a valid XML response from the server.
     url: BASE_URL + "main.php",
     data: {
-      titel: titel,
+      title: title,
       message: message,
       date: date,
       time: time,

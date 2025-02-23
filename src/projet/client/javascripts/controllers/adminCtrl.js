@@ -17,7 +17,7 @@ function chargerNotesSuccess(data, text, jqXHR) {
 
   // Loop through all notes in the XML
   $(data).find("note").each(function () {
-    var title = $(this).find("titel").text();   // Get the title of the note
+    var title = $(this).find("title").text();   // Get the title of the note
     var message = $(this).find("message").text(); // Get the message of the note
     var date = $(this).find("date").text();       // Get the date of the note
     var time = $(this).find("time").text();       // Get the date of the note
@@ -35,7 +35,7 @@ function chargerNotesSuccess(data, text, jqXHR) {
     noteCard.querySelector(".creation-date").textContent = "Created: " + date;
     
     // **Fix: Set the data attribute on the delete checkbox**
-    noteCard.querySelector(".delete-checkbox").setAttribute("data-titel_note", title);
+    noteCard.querySelector(".delete-checkbox").setAttribute("data-title_note", title);
 
     // Append the new note card to the notes grid
     notesGrid.appendChild(noteCard);
@@ -78,8 +78,8 @@ function getSelectedNotes() {
   var selectedNotes = [];
 
   $(".delete-checkbox:checked").each(function () {
-    var titelNote = $(this).data("titel_note");  // Get the title from the data attribute
-    selectedNotes.push(titelNote);
+    var titleNote = $(this).data("title_note");  // Get the title from the data attribute
+    selectedNotes.push(titleNote);
   });
 
   return selectedNotes;
@@ -92,9 +92,9 @@ function getSelectedNotes() {
 function removeDeletedNotesFromUI(deletedNotes) {
   $(".delete-checkbox:checked").each(function () {
     var noteCard = $(this).closest(".note-card");
-    var titelNote = $(this).data("titel_note");
+    var titleNote = $(this).data("title_note");
 
-    if (deletedNotes.includes(titelNote)) {
+    if (deletedNotes.includes(titleNote)) {
       noteCard.remove();
     }
   });
