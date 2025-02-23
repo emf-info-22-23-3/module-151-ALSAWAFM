@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add New Note</title>
     <link rel="stylesheet" href="./stylesheets/newNote.css">
+    <script type="text/javascript" src="javascripts/helpers/jquery-1.10.2.min.js"></script>
+  <script type="text/javascript" src="javascripts/controllers/newNote.js"></script>
+
 </head>
 <body>
     <div class="background-layer"></div>
@@ -13,17 +16,10 @@
             <div class="form-header">
                 <h2>Create New Note</h2>
             </div>
-            <input type="text" placeholder="Title" name="title">
-            <select name="category">
-                <option value="">Select Category</option>
-                <option value="ideas">Ideas</option>
-                <option value="tasks">Tasks</option>
-                <option value="reference">Reference</option>
-                <option value="plans">Plans</option>
-                <option value="thoughts">Thoughts</option>
+            <input type="text" placeholder="Title" name="titel">
+            <select name="fk_category">
             </select>
             <textarea placeholder="Write your note here..." name="message"></textarea>
-            <input type="date" value="2025-02-03">
             <div class="action-buttons">
                 <button type="button" class="back-btn" onclick="window.location.href='http://localhost:8080/projet/client/index.html'">Back to homepage</button>
                 <button type="submit" class="publish-btn">Publish note</button>

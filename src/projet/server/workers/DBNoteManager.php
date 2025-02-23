@@ -33,6 +33,7 @@ class DBNoteManager
 			$result .= '<titel>' . $data['titel'] . '</titel>';
 			$result .= '<message>' . $data['message'] . '</message>';
 			$result .= '<date>' . $data['date'] . '</date>';
+			$result .= '<time>' . $data['time'] . '</time>';
 			$result .= '</note>';
 		}
 	
@@ -41,6 +42,28 @@ class DBNoteManager
 	
 		return $result;
 	}
+
+
+	/**
+ * Retrieve all categories from the database.
+ * @return XML list of categories.
+ */
+public function GetCategories()
+{
+    $query = connexion::getInstance()->SelectQuery("SELECT pk_category, category_name FROM t_category", []);
+    
+    $result = '<categories>';
+    foreach ($query as $data) {
+        $result .= '<category>';
+        $result .= '<pk_category>' . $data['pk_category'] . '</pk_category>'; // Fix XML field names
+        $result .= '<category_name>' . $data['category_name'] . '</category_name>';
+        $result .= '</category>';
+    }
+    $result .= '</categories>';
+
+    return $result;
+}
+
 	
 
 	/**
@@ -50,10 +73,10 @@ class DBNoteManager
 	 * @param $langue La langue du député
 	 * @return la pk du député ajouté
 	 */
-	public function Add($titel, $message,$date, $fk_category )
+	public function Add($titel, $message,$date, $time, $fk_category )
 	{
-		$query = "INSERT INTO t_note (titel, message , date,fk_category) values(:titel, :message, :date, :fk_category)";
-		$params = array('titel' => $titel, 'message' => $message, 'date' => $date, 'fk_category' => $fk_category);
+		$query = "INSERT INTO t_note (titel, message , date,time,fk_category) values(:titel, :message, :date,:time, :fk_category)";
+		$params = array('titel' => $titel, 'message' => $message, 'date' => $date, 'time' => $time, 'fk_category' => $fk_category);
 		$res = connexion::getInstance()->ExecuteQuery($query, $params);
 		return connexion::getInstance()->GetLastId('t_note');
 	}
@@ -84,16 +107,12 @@ class DBNoteManager
 	 * @param $pkDepute La PK du député à supprimer
 	 * @return 'True' si la suppression a bien eu lieu, 'False' sinon
 	 */
-	public function Delete($titel)
+	public function Delete($titels)
 	{
-		$query = "DELETE from t_note where titel = :titel";
-		$params = array('titel' => $titel);
-		$res = connexion::getInstance()->ExecuteQuery($query, $params);
-		if ($res > 0) {
-			return 'True';
-		} else {
-			return 'False';
-		}
+		$placeholders = implode(',', array_fill(0, count($titels), '?')); 
+    $query = "DELETE FROM t_note WHERE titel IN ($placeholders)";
+    $res = connexion::getInstance()->ExecuteQuery($query, $titels);
+    return $res > 0 ? 'True' : 'False';
 	}
 
 }
