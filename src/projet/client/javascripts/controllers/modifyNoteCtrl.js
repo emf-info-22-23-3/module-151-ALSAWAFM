@@ -87,12 +87,24 @@ function loadCategories() {
 }
 
 /**
+ * Sanitize user input to prevent HTML injection.
+ * @param {string} input - The user input that needs sanitization.
+ * @return {string} - The sanitized input with any HTML tags escaped.
+ */
+function sanitizeInput(input) {
+  // Create a temporary div element
+  var tempDiv = document.createElement('div');
+  tempDiv.textContent = input;  // Set text content (this automatically escapes HTML)
+  return tempDiv.innerHTML;  // Return the sanitized HTML
+}
+
+/**
  * Update an existing note.
  */
 function updateNote() {
   var noteId = $("#note-select").val();
-  var title = $("#note-title").val();
-  var message = $("#note-message").val();
+  var title = $("#note-title").val().trim();
+  var message = $("#note-message").val().trim();
   var category = $("#category-select").val();
   var date = new Date().toISOString().split("T")[0];
   var time = new Date().toTimeString().split(" ")[0];
@@ -102,10 +114,23 @@ function updateNote() {
     return;
   }
 
+  // Sanitize title and message
+  var sanitizedTitle = sanitizeInput(title);
+  var sanitizedMessage = sanitizeInput(message);
+
+  console.log("Sending data to modifyNote:", {
+    noteId: noteId,
+    title: sanitizedTitle,
+    message: sanitizedMessage,
+    date: date,
+    time: time,
+    category: category
+  });
+
   modifyNote(
     noteId,
-    title,
-    message,
+    sanitizedTitle,
+    sanitizedMessage,
     date,
     time,
     category,
@@ -129,7 +154,6 @@ function updateNote() {
     }
   );
 }
-
 
 
 /**

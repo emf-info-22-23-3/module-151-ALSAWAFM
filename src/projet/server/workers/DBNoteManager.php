@@ -22,28 +22,28 @@ class DBNoteManager
 	{
 		// Remove the condition on 'title' to get all records
 		$query = connexion::getInstance()->SelectQuery("SELECT * FROM t_note", []);
-	
+		
 		// Start the XML response with <notes>
 		$result = '<notes>';
-	
+		
 		// Loop through the result and construct XML for each note
 		foreach ($query as $data) {
 			$result .= '<note>';
 			$result .= '<pk_note>' . $data['pk_note'] . '</pk_note>';
-			$result .= '<title>' . $data['title'] . '</title>';
-			$result .= '<message>' . $data['message'] . '</message>';
+			$result .= '<title>' . htmlspecialchars($data['title'], ENT_QUOTES, 'UTF-8') . '</title>';
+			$result .= '<message>' . htmlspecialchars($data['message'], ENT_NOQUOTES, 'UTF-8') . '</message>';  // Don't escape message content
 			$result .= '<date>' . $data['date'] . '</date>';
 			$result .= '<time>' . $data['time'] . '</time>';
 			$result .= '<likes>' . $data['likes'] . '</likes>'; // Add likes count
-
 			$result .= '</note>';
 		}
-	
+		
 		// Close the <notes> tag and return the XML
 		$result .= '</notes>';
-	
+		
 		return $result;
 	}
+	
 
 
 	/**
@@ -131,15 +131,17 @@ public function GetSingleNote($pk_note)
         return "<note><error>Note not found</error></note>";
     }
 
+    // Ensure that the data is escaped when returning to prevent XSS
     $result = '<note>';
     $result .= '<pk_note>' . $query[0]['pk_note'] . '</pk_note>';
-    $result .= '<title>' . $query[0]['title'] . '</title>';
-    $result .= '<message>' . $query[0]['message'] . '</message>';
+    $result .= '<title>' . htmlspecialchars($query[0]['title'], ENT_QUOTES, 'UTF-8') . '</title>';
+    $result .= '<message>' . htmlspecialchars($query[0]['message'], ENT_NOQUOTES, 'UTF-8') . '</message>'; // Don't escape message content
     $result .= '<fk_category>' . $query[0]['fk_category'] . '</fk_category>';
     $result .= '</note>';
 
     return $result;
 }
+
 
 public function IncrementLike($pk_note)
 {

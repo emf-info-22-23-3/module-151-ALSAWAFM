@@ -18,3 +18,9 @@ Params: Array
     [1] => 34r4r4r3r4r4343r
 )
 
+Query: DELETE FROM t_note WHERE title IN (?)
+Params: Array
+(
+    [0] => trgtrt
+)
+

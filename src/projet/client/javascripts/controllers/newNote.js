@@ -20,7 +20,12 @@ function fetchCategories() {
   );
 }
 
-
+function sanitizeInput(input) {
+  // Create a temporary div element
+  var tempDiv = document.createElement('div');
+  tempDiv.textContent = input;  // Set text content (this automatically escapes HTML)
+  return tempDiv.innerHTML;  // Return the sanitized HTML
+}
 
 function getNoteFormData() {
   var title = $("input[name='title']").val().trim();
@@ -32,8 +37,8 @@ function getNoteFormData() {
   }
 
   return {
-    title: title,
-    message: message,
+    title: sanitizeInput(title),
+    message: sanitizeInput(message),
     fk_category: fk_category
   };
 }
