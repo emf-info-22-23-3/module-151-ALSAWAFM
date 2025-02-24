@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modify Note</title>
+    <link rel="stylesheet" href="./stylesheets/modifyNote.css">
+    <script type="text/javascript" src="javascripts/helpers/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="javascripts/controllers/modifyNoteCtrl.js"></script>
+</head>
+<body>
+    <div class="background-layer"></div>
+    <div class="container">
+        <form class="note-form">
+            <div class="form-header">
+                <h2>Modify Existing Note</h2>
+            </div>
+
+            <!-- Dropdown to Select Note -->
+            <select id="note-select">
+                <option value="">Select a Note</option>
+            </select>
+
+            <input type="text" id="note-title" placeholder="Title" name="title">
+            <select id="category-select" name="fk_category"></select>
+            <textarea id="note-message" placeholder="Write your note here..." name="message"></textarea>
+
+            <div class="action-buttons">
+                <button type="button" class="back-btn" onclick="window.location.href='http://localhost:8080/projet/client/index.html'">Back to homepage</button>
+                <button type="submit" class="publish-btn">Modify Note</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

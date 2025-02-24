@@ -6,15 +6,15 @@
 		switch ($_SERVER['REQUEST_METHOD'])
 		{
 			case 'GET':
+				$noteBD = new DBNoteManager();
 				if (isset($_GET['action']) && $_GET['action'] == 'getCategories') {
-					$noteBD = new DBNoteManager();
 					echo $noteBD->GetCategories();
-					exit; // Ensure the script stops execution
+				} elseif (isset($_GET['action']) && $_GET['action'] == 'getNote' && isset($_GET['pk_note'])) {
+					echo $noteBD->GetSingleNote($_GET['pk_note']); // New function to return only one note
 				} else {
-					$noteBD = new DBNoteManager();
 					echo $noteBD->GetInXML();
-					exit;
 				}
+				exit;
 				break;
 			case 'POST':
 				if (isset($_POST['title']) and isset($_POST['message'])and isset($_POST['date'])and isset($_POST['time'])and isset($_POST['fk_category']))
@@ -36,7 +36,7 @@
 				if (isset($vars['title']) and isset($vars['message'])and isset($vars['date'])and isset($vars['fk_category']))
 				{
 					$noteBD = new DBNoteManager();
-					echo $noteBD->Update($vars['title'], $vars['message'], $vars['date'], $vars['fk_category'], pk_note: $vars['pk_note']);
+					echo $noteBD->Update($vars['title'], $vars['message'], $vars['date'], $vars['time'], $vars['fk_category'], $vars['pk_note']);
 				}
 				else{
 					echo 'Paramètre pk_note, title, message, date ou fk_category manquant';

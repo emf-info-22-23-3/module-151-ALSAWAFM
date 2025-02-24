@@ -123,3 +123,56 @@ function getCategories(successCallback, errorCallback) {
   });
 }
 
+
+/**
+ * Fetch a specific note's details.
+ * @param {string} noteId - The ID of the note.
+ * @param {function} successCallback - Callback for success.
+ * @param {function} errorCallback - Callback for error.
+ */
+function getNoteDetails(noteId, successCallback, errorCallback) {
+  $.ajax({
+    type: "GET",
+    dataType: "xml",
+    url: BASE_URL + `main.php?action=getNote&pk_note=${encodeURIComponent(noteId)}`,
+    success: successCallback,
+    error: errorCallback
+  });
+}
+
+/**
+ * Modify an existing note.
+ * @param {number} noteId - The ID of the note.
+ * @param {string} title - The updated title.
+ * @param {string} message - The updated message.
+ * @param {string} date - The updated date.
+ * @param {number} fk_category - The updated category.
+ * @param {function} successCallback - Callback for success.
+ * @param {function} errorCallback - Callback for error.
+ */
+function modifyNote(noteId, title, message, date, time, fk_category, successCallback, errorCallback) {
+  $.ajax({
+    type: "PUT",
+    dataType: "xml",
+    url: BASE_URL + "main.php",
+    data: `pk_note=${encodeURIComponent(noteId)}&title=${encodeURIComponent(title)}&message=${encodeURIComponent(message)}&date=${encodeURIComponent(date)}&time=${encodeURIComponent(time)}&fk_category=${encodeURIComponent(fk_category)}`,
+    success: successCallback,
+    error: errorCallback
+  });
+}
+
+
+/**
+ * Fetch all notes from the server.
+ * @param {function} successCallback - Callback for success.
+ * @param {function} errorCallback - Callback for error.
+ */
+function getNotes(successCallback, errorCallback) {
+  $.ajax({
+    type: "GET",
+    dataType: "xml",
+    url: BASE_URL + "main.php?action=getNotes",
+    success: successCallback,
+    error: errorCallback
+  });
+}

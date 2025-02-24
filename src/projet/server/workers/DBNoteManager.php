@@ -89,10 +89,10 @@ public function GetCategories()
 	 * @param $langue La langue du député
 	 * @return 'True' si la modification a bien eu lieu, 'False' sinon
 	 */
-	public function Update($title, $message,$date, $fk_category,$pk_note )
+	public function Update($title, $message,$date,$time, $fk_category,$pk_note )
 	{
-		$query = "UPDATE t_note set title = :title, message = :message, date = :date, fk_category = :fk_category where pk_note = :pk_note";
-		$params = array('title' => $title, 'message' => $message,'date' => $date,'fk_category' => $fk_category, 'pk_note' => $pk_note);
+		$query = "UPDATE t_note set title = :title, message = :message, date = :date,  time = :time, fk_category = :fk_category where pk_note = :pk_note";
+		$params = array('title' => $title, 'message' => $message,'date' => $date,'time' => $time,'fk_category' => $fk_category, 'pk_note' => $pk_note);
 		$res = connexion::getInstance()->ExecuteQuery($query, $params);
 		if ($res > 0) {
 			return 'True';
@@ -118,6 +118,26 @@ public function GetCategories()
     
     return $res > 0 ? 'True' : 'False';
 }
+
+
+public function GetSingleNote($pk_note)
+{
+    $query = connexion::getInstance()->SelectQuery("SELECT * FROM t_note WHERE pk_note = ?", [$pk_note]);
+
+    if (empty($query)) {
+        return "<note><error>Note not found</error></note>";
+    }
+
+    $result = '<note>';
+    $result .= '<pk_note>' . $query[0]['pk_note'] . '</pk_note>';
+    $result .= '<title>' . $query[0]['title'] . '</title>';
+    $result .= '<message>' . $query[0]['message'] . '</message>';
+    $result .= '<fk_category>' . $query[0]['fk_category'] . '</fk_category>';
+    $result .= '</note>';
+
+    return $result;
+}
+
 
 }
 ?>

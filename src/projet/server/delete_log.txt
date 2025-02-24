@@ -1,6 +1,0 @@
-Query: DELETE FROM t_note WHERE title IN (?)
-Params: Array
-(
-    [0] => fdg
-)
-
