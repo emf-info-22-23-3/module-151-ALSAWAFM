@@ -112,8 +112,12 @@ function updateNote() {
     function (response) {
       if ($(response).find("result").text() === "true") {
         alert("Note modified successfully!");
+<<<<<<< HEAD
         loadNotes(); // Refresh the note list
         
+=======
+        loadNotes(); // Refresh z
+>>>>>>> 5984214c88cc9438287b3501e347e75f8b203c4e
         // Wait for notes to reload, then re-select the modified note
         setTimeout(() => {
           $("#note-select").val(noteId).change(); 

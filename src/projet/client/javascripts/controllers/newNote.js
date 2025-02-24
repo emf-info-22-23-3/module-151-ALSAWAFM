@@ -3,20 +3,20 @@
  */
 function fetchCategories() {
   getCategories(
-      function (data) { // Success callback
-          var categoryDropdown = $("select[name='fk_category']");
-          categoryDropdown.empty(); // Clear existing options
-          categoryDropdown.append('<option value="">Select Category</option>');
+    function (data) { // Success callback
+      var categoryDropdown = $("select[name='fk_category']");
+      categoryDropdown.empty(); // Clear existing options
+      categoryDropdown.append('<option value="">Select Category</option>');
 
-          $(data).find("category").each(function () {
-              var id = $(this).find("pk_category").text();
-              var name = $(this).find("category_name").text();
-              categoryDropdown.append('<option value="' + id + '">' + name + '</option>');
-          });
-      },
-      function () { // Error callback
-          alert("Error loading categories. Please try again.");
-      }
+      $(data).find("category").each(function () {
+        var id = $(this).find("pk_category").text();
+        var name = $(this).find("category_name").text();
+        categoryDropdown.append('<option value="' + id + '">' + name + '</option>');
+      });
+    },
+    function () { // Error callback
+      alert("Error loading categories. Please try again.");
+    }
   );
 }
 
@@ -28,13 +28,13 @@ function getNoteFormData() {
   var fk_category = $("select[name='fk_category']").val(); // Get selected category ID
 
   if (!title || !message || !fk_category) {
-      return null;
+    return null;
   }
 
   return {
     title: title,
-      message: message,
-      fk_category: fk_category
+    message: message,
+    fk_category: fk_category
   };
 }
 
@@ -47,8 +47,8 @@ function handlePublishNoteClick(e) {
 
   var noteData = getNoteFormData();
   if (!noteData || !noteData.fk_category) {
-      alert("Please fill in all fields, including category.");
-      return;
+    alert("Please fill in all fields, including category.");
+    return;
   }
 
   var now = new Date();
@@ -56,29 +56,29 @@ function handlePublishNoteClick(e) {
   var currentTime = now.toTimeString().split(" ")[0]; // HH:MM:SS
 
   console.log("Sending data to addNote:", {
-      title: noteData.title,
-      message: noteData.message,
-      date: currentDate,
-      time: currentTime,
-      category: noteData.fk_category
+    title: noteData.title,
+    message: noteData.message,
+    date: currentDate,
+    time: currentTime,
+    category: noteData.fk_category
   });
 
   addNote(
-      noteData.title,
-      noteData.message,
-      currentDate,
-      currentTime,
-      noteData.fk_category,
-      function() {
-          alert("Note published successfully!");
-          window.location.reload();
-          console.log("Server response:", response);
+    noteData.title,
+    noteData.message,
+    currentDate,
+    currentTime,
+    noteData.fk_category,
+    function () {
+      alert("Note published successfully!");
+      window.location.reload();
+      console.log("Server response:", response);
 
-      },
-      function(error) { // Modify this line
-          alert("Error publishing note. Please try again.");
-          console.error("Error response:", error.responseText); // Log full server response
-        }
+    },
+    function (error) { // Modify this line
+      alert("Error publishing note. Please try again.");
+      console.error("Error response:", error.responseText); // Log full server response
+    }
   );
 }
 
@@ -92,8 +92,8 @@ function attachEventHandlers() {
 */
 $(document).ready(function () {
   $.getScript("javascripts/services/servicesHttp.js", function () {
-      console.log("servicesHttp.js loaded!");
-      fetchCategories(); // Load categories on page load
-      attachEventHandlers();
+    console.log("servicesHttp.js loaded!");
+    fetchCategories(); // Load categories on page load
+    attachEventHandlers();
   });
 });
