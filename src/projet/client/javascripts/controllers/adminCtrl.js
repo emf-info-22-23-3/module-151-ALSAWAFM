@@ -4,12 +4,7 @@
 
 /**
  * Method called when the list of notes is successfully returned
- * @param {type} data
- * @param {type} text
- * @param {type} jqXHR
- * @returns {undefined}
  */
-
 function chargerNotesSuccess(data, text, jqXHR) {
   console.log("chargerNotesSuccess called");
   console.log("Data: ", data);  // Log the raw response to verify if it's correct
@@ -17,21 +12,30 @@ function chargerNotesSuccess(data, text, jqXHR) {
   var notesGrid = document.getElementById("notes-grid"); // Get the container for notes
   var templateCard = document.querySelector(".note-card.template-card"); // Get the template card
 
+  // Clear any previously appended notes (except the template)
+  $(".note-card").not(".template-card").remove();
+
   // Loop through all notes in the XML
   $(data).find("note").each(function () {
-    var title = $(this).find("titel").text(); // Get the title of the note
+    var title = $(this).find("title").text();   // Get the title of the note
     var message = $(this).find("message").text(); // Get the message of the note
-    var date = $(this).find("date").text(); // Get the date of the note
+    var date = $(this).find("date").text();       // Get the date of the note
+    var time = $(this).find("time").text();       // Get the date of the note
+
 
     // Clone the template card and fill it with data
     var noteCard = templateCard.cloneNode(true); // Clone the template
-    noteCard.style.display = "block"; // Make it visible
+    noteCard.classList.remove("template-card");    // Remove the template class
+    noteCard.style.display = "block";              // Make it visible
 
     // Update the card with the note's data
     noteCard.querySelector(".note-title").textContent = title;
-    noteCard.querySelector(".note-date").textContent = date;
+    noteCard.querySelector(".note-time").textContent = time;
     noteCard.querySelector(".note-preview").textContent = message.length > 100 ? message.substring(0, 100) + "..." : message;
     noteCard.querySelector(".creation-date").textContent = "Created: " + date;
+    
+    // **Fix: Set the data attribute on the delete checkbox**
+    noteCard.querySelector(".delete-checkbox").setAttribute("data-title_note", title);
 
     // Append the new note card to the notes grid
     notesGrid.appendChild(noteCard);
@@ -40,15 +44,10 @@ function chargerNotesSuccess(data, text, jqXHR) {
 
 /**
  * Method called in case of an error while reading the notes
- * @param {type} request
- * @param {type} status
- * @param {type} error
- * @returns {undefined}
  */
 function chargerNotesError(request, status, error) {
   alert("Error loading notes: " + error);
 }
-
 
 /**
  * Handle the click event for deleting selected notes.
@@ -57,9 +56,10 @@ function handleDeleteSelected() {
   var selectedNotes = getSelectedNotes();
 
   if (selectedNotes.length > 0) {
-    deleteNotesFromServer(selectedNotes, function (response) {
+    console.log("Deleting notes:", selectedNotes); // Debug: check selected notes
+    deleteNotes(selectedNotes.join(','), function (response) {
       console.log("Notes deleted successfully", response);
-      removeDeletedNotesFromUI();
+      removeDeletedNotesFromUI(selectedNotes);
       alert("Selected notes deleted successfully!");
     }, function (jqXHR, textStatus, errorThrown) {
       console.log("Error deleting notes:", errorThrown);
@@ -72,31 +72,44 @@ function handleDeleteSelected() {
 
 /**
  * Get the list of selected notes by checking the checkboxes.
- * @returns {Array} The list of selected note titles (or unique identifiers).
+ * @returns {Array} The list of selected note titles.
  */
 function getSelectedNotes() {
   var selectedNotes = [];
 
   $(".delete-checkbox:checked").each(function () {
-    var titelNote = $(this).data("titel_note");  // Get the titel_note (or unique identifier)
-    selectedNotes.push(titelNote);
+    var titleNote = $(this).data("title_note");  // Get the title from the data attribute
+    selectedNotes.push(titleNote);
   });
 
   return selectedNotes;
 }
 
+/**
+ * Remove deleted note cards from the UI.
+ * @param {Array} deletedNotes - List of note titles that were deleted.
+ */
+function removeDeletedNotesFromUI(deletedNotes) {
+  $(".delete-checkbox:checked").each(function () {
+    var noteCard = $(this).closest(".note-card");
+    var titleNote = $(this).data("title_note");
+
+    if (deletedNotes.includes(titleNote)) {
+      noteCard.remove();
+    }
+  });
+}
 
 /**
- * "Start" method called after the page is fully loaded
+ * "Start" method called after the page is fully loaded.
  */
 $(document).ready(function () {
-
-  // Call the function to load notes when the page is ready
+  // Load the services script and then the notes
   $.getScript("javascripts/services/servicesHttp.js", function () {
     console.log("servicesHttp.js loaded!");
     chargerNotes(chargerNotesSuccess, chargerNotesError); // Load notes from server
   });
+  
+  // Attach the event handler for delete button
   $('#delete-selected-btn').click(handleDeleteSelected);
-
-
 });

@@ -20,7 +20,7 @@ function connectSuccess(data, text, jqXHR) {
 
 function disconnectSuccess(data, text, jqXHR) {
   alert("Utilisateur déconnecté");
-  chargerPersonnel(chargerPersonnelSuccess, CallbackError);
+  window.location.href = "index.html";  // Redirect to index.html
 }
 
 /**
@@ -41,6 +41,8 @@ function CallbackError(request, status, error) {
  */
 $(document).ready(function () {
   var butConnect = $("#login-btn");
+  var butDisconnect = $("#disconnect-btn");
+
 
 
   butConnect.click(function (event) {
@@ -54,5 +56,9 @@ $(document).ready(function () {
     // Call the connect function to send data to the server
     connect(email, password, connectSuccess, CallbackError);
   });
+
+butDisconnect.click(function(event) {
+    disconnect(disconnectSuccess, CallbackError);
+});
 
 });

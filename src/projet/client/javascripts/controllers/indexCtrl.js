@@ -19,9 +19,11 @@ function chargerNotesSuccess(data, text, jqXHR) {
 
   // Loop through all notes in the XML
   $(data).find("note").each(function () {
-    var title = $(this).find("titel").text(); // Get the title of the note
+    var title = $(this).find("title").text(); // Get the title of the note
     var message = $(this).find("message").text(); // Get the message of the note
     var date = $(this).find("date").text(); // Get the date of the note
+    var time = $(this).find("time").text(); // Get the date of the note
+
 
     // Clone the template card and fill it with data
     var noteCard = templateCard.cloneNode(true); // Clone the template
@@ -29,7 +31,7 @@ function chargerNotesSuccess(data, text, jqXHR) {
 
     // Update the card with the note's data
     noteCard.querySelector(".note-title").textContent = title;
-    noteCard.querySelector(".note-date").textContent = date;
+    noteCard.querySelector(".note-time").textContent = time;
     noteCard.querySelector(".note-preview").textContent = message.length > 100 ? message.substring(0, 100) + "..." : message;
     noteCard.querySelector(".creation-date").textContent = "Created: " + date;
 

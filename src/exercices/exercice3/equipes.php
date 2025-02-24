@@ -15,7 +15,7 @@
       <?php
       require('ctrl.php');
 
-      // A compléter....
+      // A compléter.... TESTESTESTGESTETET
       $equipes = getEquipes();
 
       // Loop through each team and display it in the table
