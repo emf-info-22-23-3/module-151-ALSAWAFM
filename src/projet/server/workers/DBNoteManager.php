@@ -34,6 +34,8 @@ class DBNoteManager
 			$result .= '<message>' . $data['message'] . '</message>';
 			$result .= '<date>' . $data['date'] . '</date>';
 			$result .= '<time>' . $data['time'] . '</time>';
+			$result .= '<likes>' . $data['likes'] . '</likes>'; // Add likes count
+
 			$result .= '</note>';
 		}
 	
@@ -136,6 +138,15 @@ public function GetSingleNote($pk_note)
     $result .= '</note>';
 
     return $result;
+}
+
+public function IncrementLike($pk_note)
+{
+    // Query to increment the like count for the note
+    $query = "UPDATE t_note SET likes = likes + 1 WHERE pk_note = :pk_note";
+    $params = array('pk_note' => $pk_note);
+    $res = connexion::getInstance()->ExecuteQuery($query, $params);
+    return $res > 0;
 }
 
 

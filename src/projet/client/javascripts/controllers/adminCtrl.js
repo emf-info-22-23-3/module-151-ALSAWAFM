@@ -21,6 +21,10 @@ function chargerNotesSuccess(data, text, jqXHR) {
     var message = $(this).find("message").text(); // Get the message of the note
     var date = $(this).find("date").text();       // Get the date of the note
     var time = $(this).find("time").text();       // Get the date of the note
+    var likes = $(this).find("likes").text(); // Get the date of the note
+    var pk_note = $(this).find("pk_note").text(); // Get the primary key of the note
+
+
 
 
     // Clone the template card and fill it with data
@@ -33,7 +37,21 @@ function chargerNotesSuccess(data, text, jqXHR) {
     noteCard.querySelector(".note-time").textContent = time;
     noteCard.querySelector(".note-preview").textContent = message.length > 100 ? message.substring(0, 100) + "..." : message;
     noteCard.querySelector(".creation-date").textContent = "Created: " + date;
-    
+    noteCard.querySelector(".like-count").textContent = likes;
+
+    // Attach click event for the like button
+    var likeButton = noteCard.querySelector(".like-button");
+    likeButton.addEventListener("click", function () {
+      incrementLike(pk_note, function () {
+        // On success, update the like count in the UI
+        var likeCountElement = noteCard.querySelector(".like-count");
+        var currentLikes = parseInt(likeCountElement.textContent);
+        likeCountElement.textContent = currentLikes + 1;
+      }, function () {
+        alert("Error liking the note.");
+      });
+    });
+
     // **Fix: Set the data attribute on the delete checkbox**
     noteCard.querySelector(".delete-checkbox").setAttribute("data-title_note", title);
 
@@ -41,6 +59,8 @@ function chargerNotesSuccess(data, text, jqXHR) {
     notesGrid.appendChild(noteCard);
   });
 }
+
+
 
 /**
  * Method called in case of an error while reading the notes
@@ -112,4 +132,8 @@ $(document).ready(function () {
   
   // Attach the event handler for delete button
   $('#delete-selected-btn').click(handleDeleteSelected);
+
+  $('#modify-btn').click(function() {
+    window.location.href = 'modifyNote.html'; // Navigate to modifyNote.html when clicked
+  });
 });

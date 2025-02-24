@@ -16,21 +16,26 @@
 				}
 				exit;
 				break;
-			case 'POST':
-				if (isset($_POST['title']) and isset($_POST['message'])and isset($_POST['date'])and isset($_POST['time'])and isset($_POST['fk_category']))
-				{
-					$noteBD = new DBNoteManager();
-					header("Content-Type: text/xml");
-					echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
-					echo "<response>";
-					echo "<status>success</status>";
-					echo "<pk_note>" . $noteBD->Add($_POST['title'], $_POST['message'], $_POST['date'], $_POST['time'], $_POST['fk_category']) . "</pk_note>";
-					echo "</response>";
-									}
-				else{
-					echo 'Paramètre title, message, date, time ou fk_category manquant';
-				}
-				break;
+				case 'POST':
+					if (isset($_POST['action']) && $_POST['action'] == 'incrementLike' && isset($_POST['pk_note'])) {
+						$noteBD = new DBNoteManager();
+						header("Content-Type: text/xml");
+						echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+						echo "<response>";
+						
+						// Call the function to increment the like count
+						$result = $noteBD->incrementLike($_POST['pk_note']);
+						
+						if ($result) {
+							echo "<status>success</status>";
+						} else {
+							echo "<status>error</status>";
+						}
+						
+						echo "</response>";
+						exit;
+					}
+					break;
 			case 'PUT':
 				parse_str(file_get_contents("php://input"), $vars);
 				if (isset($vars['title']) and isset($vars['message'])and isset($vars['date'])and isset($vars['fk_category']))

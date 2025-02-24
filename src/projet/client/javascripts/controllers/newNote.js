@@ -14,7 +14,7 @@ function fetchCategories() {
         categoryDropdown.append('<option value="' + id + '">' + name + '</option>');
       });
     },
-    function () { // Error callback
+    function (request, status, error) { // Error callback
       alert("Error loading categories. Please try again.");
     }
   );
