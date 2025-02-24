@@ -1,24 +1,24 @@
 $(document).ready(function () {
   $.getScript("javascripts/services/servicesHttp.js", function () {
     console.log("servicesHttp.js loaded!");
-  loadNotes(); // Load notes into the dropdown
-  loadCategories(); // Load categories into the dropdown
+    
+    loadNotes(); // Load notes into the dropdown
+    loadCategories(); // Load categories into the dropdown
 
-  $("#note-select").change(function () {
-    var selectedNoteId = $(this).val();
-    if (selectedNoteId) {
-      loadNoteDetails(selectedNoteId);
-    } else {
-      clearForm();
-    }
+    $("#note-select").off("change").on("change", function () {
+      var selectedNoteId = $(this).val();
+      if (selectedNoteId) {
+        loadNoteDetails(selectedNoteId);
+      } else {
+        clearForm();
+      }
+    });
+
+    $(".note-form").off("submit").on("submit", function (event) {
+      event.preventDefault();
+      updateNote();
+    });
   });
-
-  $(".note-form").submit(function (event) {
-    event.preventDefault();
-    updateNote();
-  });
-
-});
 });
 
 /**
@@ -32,8 +32,8 @@ function loadNotes() {
 
       $(xml).find("note").each(function () {
         var noteId = $(this).find("pk_note").text();
-        var title = $(this).find("title").text();
-        notesDropdown.append(`<option value="${noteId}">${title}</option>`);
+        var title = escapeHtmlEntities($(this).find("title").text()); // Escape output
+        notesDropdown.append($('<option>').val(noteId).text(title));
       });
     },
     function () {
@@ -48,25 +48,25 @@ function loadNotes() {
  */
 function loadNoteDetails(noteId) {
   getNoteDetails(
-      noteId,
-      function (xml) {
-          var note = $(xml).find("note").first(); // Ensure only one note is selected
-          if (note.length === 0) {
-              alert("Note not found.");
-              return;
-          }
-          $("#note-title").val(note.find("title").text());
-          $("#note-message").val(note.find("message").text());
-          $("#category-select").val(note.find("fk_category").text()); // Ensure correct category selection
-      },
-      function () {
-          alert("Error loading note details.");
+    noteId,
+    function (xml) {
+      var note = $(xml).find("note").first(); // Ensure only one note is selected
+      if (note.length === 0) {
+        alert("Note not found.");
+        return;
       }
+      $("#note-title").val(decodeHtmlEntities(note.find("title").text()));
+      $("#note-message").val(decodeHtmlEntities(note.find("message").text()));
+      $("#category-select").val(note.find("fk_category").text()); // Ensure correct category selection
+    },
+    function () {
+      alert("Error loading note details.");
+    }
   );
 }
 
 /**
- * Load categories into the dropdown.
+ * Load categories into the dropdown securely.
  */
 function loadCategories() {
   getCategories(
@@ -76,8 +76,8 @@ function loadCategories() {
 
       $(xml).find("category").each(function () {
         var id = $(this).find("pk_category").text();
-        var name = $(this).find("category_name").text();
-        categoryDropdown.append(`<option value="${id}">${name}</option>`);
+        var name = escapeHtmlEntities($(this).find("category_name").text());
+        categoryDropdown.append($('<option>').val(id).text(name));
       });
     },
     function () {
@@ -92,14 +92,37 @@ function loadCategories() {
  * @return {string} - The sanitized input with any HTML tags escaped.
  */
 function sanitizeInput(input) {
-  // Create a temporary div element
   var tempDiv = document.createElement('div');
-  tempDiv.textContent = input;  // Set text content (this automatically escapes HTML)
-  return tempDiv.innerHTML;  // Return the sanitized HTML
+  tempDiv.textContent = input;  // Auto-escapes HTML
+  return tempDiv.innerHTML;
 }
 
 /**
- * Update an existing note.
+ * Escape HTML before displaying to prevent XSS attacks.
+ * @param {string} str - The string to escape.
+ * @return {string} - Escaped HTML string.
+ */
+function escapeHtmlEntities(str) {
+  return str.replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+}
+
+/**
+ * Decode escaped HTML entities (for displaying saved notes).
+ * @param {string} input - The HTML-escaped string.
+ * @return {string} - Decoded string.
+ */
+function decodeHtmlEntities(input) {
+  var tempDiv = document.createElement("div");
+  tempDiv.innerHTML = input;
+  return tempDiv.textContent || tempDiv.innerText;
+}
+
+/**
+ * Update an existing note securely.
  */
 function updateNote() {
   var noteId = $("#note-select").val();
@@ -108,6 +131,15 @@ function updateNote() {
   var category = $("#category-select").val();
   var date = new Date().toISOString().split("T")[0];
   var time = new Date().toTimeString().split(" ")[0];
+  var adminData = localStorage.getItem("admin");
+
+  if (!adminData) {
+    alert("Admin session expired. Please log in again.");
+    return;
+  }
+
+  var admin = JSON.parse(adminData);
+  var adminId = admin.pk_admin; // Ensure this matches the key where admin ID is stored
 
   if (!noteId || !title || !message || !category) {
     alert("Please fill in all fields.");
@@ -124,7 +156,9 @@ function updateNote() {
     message: sanitizedMessage,
     date: date,
     time: time,
-    category: category
+    category: category,
+    adminId: adminId
+
   });
 
   modifyNote(
@@ -134,6 +168,7 @@ function updateNote() {
     date,
     time,
     category,
+    adminId, // Pass admin ID here
     function (response) {
       console.log("Modify response:", response); // Log the response to debug
 
@@ -149,15 +184,16 @@ function updateNote() {
         alert("Error modifying note.");
       }
     },
-    function () {
+    function (jqXHR, textStatus, errorThrown) {
+      console.error("Modify note failed:", textStatus, errorThrown);
+
       alert("Error modifying note.");
     }
   );
 }
 
-
 /**
- * Clear form fields.
+ * Clear form fields securely.
  */
 function clearForm() {
   $("#note-title").val("");

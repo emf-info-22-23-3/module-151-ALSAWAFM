@@ -54,11 +54,11 @@ if (isset($_SERVER['REQUEST_METHOD'])) {
 			break;
 		case 'PUT':
 			parse_str(file_get_contents("php://input"), $vars);
-			if (isset($vars['title']) and isset($vars['message']) and isset($vars['date']) and isset($vars['fk_category'])) {
+			if (isset($vars['title']) and isset($vars['message']) and isset($vars['date']) and isset($vars['fk_category'])and isset($vars['fk_admin'])) {
 				$noteBD = new DBNoteManager();
-				echo $noteBD->Update($vars['title'], $vars['message'], $vars['date'], $vars['time'], $vars['fk_category'], $vars['pk_note']);
+				echo $noteBD->Update($vars['title'], $vars['message'], $vars['date'], $vars['time'], $vars['fk_category'], $vars['pk_note'], $vars['fk_admin']);
 			} else {
-				echo 'Paramètre pk_note, title, message, date ou fk_category manquant';
+				echo 'Paramètre pk_note, title, message, date,  fk_category ou fk_admin manquant';
 			}
 			break;
 		case 'DELETE':
