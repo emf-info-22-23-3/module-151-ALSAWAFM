@@ -226,7 +226,7 @@ body {
 }
 
 /* Reuse login-btn styles for new buttons */
-.modify-btn, .save-btn, .disconnect-btn,.delete-btn {
+.modify-btn, .disconnect-btn,.delete-btn {
     background: transparent;
     border: 2px solid #2575fc;
     color: #2575fc;
@@ -237,7 +237,7 @@ body {
     cursor: pointer;
 }
 
-.modify-btn:hover, .save-btn:hover, .disconnect-btn:hover, .delete-btn:hover{
+.modify-btn:hover, .disconnect-btn:hover, .delete-btn:hover{
     background: #2575fc;
     color: white;
 }
