@@ -131,15 +131,8 @@ function updateNote() {
   var category = $("#category-select").val();
   var date = new Date().toISOString().split("T")[0];
   var time = new Date().toTimeString().split(" ")[0];
-  var adminData = localStorage.getItem("admin");
+  var adminId = localStorage.getItem("adminId");
 
-  if (!adminData) {
-    alert("Admin session expired. Please log in again.");
-    return;
-  }
-
-  var admin = JSON.parse(adminData);
-  var adminId = admin.pk_admin; // Ensure this matches the key where admin ID is stored
 
   if (!noteId || !title || !message || !category) {
     alert("Please fill in all fields.");

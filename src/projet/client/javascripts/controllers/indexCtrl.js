@@ -35,7 +35,7 @@ function chargerNotesSuccess(data, text, jqXHR) {
     noteCard.querySelector(".note-title").textContent = title;
     noteCard.querySelector(".note-time").textContent = time;
     noteCard.querySelector(".note-preview").textContent = message.length > 100 ? message.substring(0, 100) + "..." : message;
-    noteCard.querySelector(".creation-date").textContent = "Created: " + date;
+    noteCard.querySelector(".creation-date").textContent = "Last update: " + date;
     noteCard.querySelector(".like-count").textContent = likes;
 
     // Attach click event for the like button
@@ -73,9 +73,12 @@ function chargerNotesError(request, status, error) {
  */
 $(document).ready(function () {
 
-  if (localStorage.getItem("userLoggedIn")) {
-    window.location.href = "admin.html";
-  }
+  var adminEmail = localStorage.getItem("adminEmail");
+    var adminId = localStorage.getItem("adminId");
+
+    if (adminEmail && adminId) {  // Check if admin is already logged in
+        window.location.href = "admin.html";
+    }
 
   // Call the function to load notes when the page is ready
   $.getScript("javascripts/services/servicesHttp.js", function () {

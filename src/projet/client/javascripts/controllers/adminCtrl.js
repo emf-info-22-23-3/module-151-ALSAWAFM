@@ -36,7 +36,7 @@ function chargerNotesSuccess(data, text, jqXHR) {
     noteCard.querySelector(".note-title").textContent = title;
     noteCard.querySelector(".note-time").textContent = time;
     noteCard.querySelector(".note-preview").textContent = message.length > 100 ? message.substring(0, 100) + "..." : message;
-    noteCard.querySelector(".creation-date").textContent = "Created: " + date;
+    noteCard.querySelector(".creation-date").textContent = "Last update: " + date;
     noteCard.querySelector(".like-count").textContent = likes;
 
     // Attach click event for the like button
@@ -125,8 +125,11 @@ function removeDeletedNotesFromUI(deletedNotes) {
  */
 $(document).ready(function () {
 
-  if (!localStorage.getItem("userLoggedIn")) {  // Using sessionStorage to track login state
-    window.location.href = "index.html";  // Redirect to index.html if not logged in
+  var adminEmail = localStorage.getItem("adminEmail");
+  var adminId = localStorage.getItem("adminId");
+
+  if (!adminEmail || !adminId) {  // Check if admin is logged in
+      window.location.href = "index.html";  // Redirect to index.html if not logged in
   }
 
   

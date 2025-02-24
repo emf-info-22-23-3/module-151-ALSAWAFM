@@ -10,8 +10,17 @@ function connectSuccess(data, text, jqXHR) {
   if ($(data).find("result").text() == 'true') {
     alert("Login successful");
 
-    // Store the login state in sessionStorage (or localStorage)
-    localStorage.setItem("userLoggedIn", true);
+  var adminEmail = $(data).find("email").text().trim();
+    var adminId = $(data).find("pk_admin").text().trim();
+
+    if (adminEmail && adminId) {
+      localStorage.setItem("adminEmail", adminEmail);
+      localStorage.setItem("adminId", adminId);
+      
+    } else {
+      alert("Error retrieving admin details.");
+      return;
+    }
 
     // Redirect to admin.html
     window.location.href = "admin.html";
@@ -25,7 +34,10 @@ function disconnectSuccess(data, text, jqXHR) {
   alert("User disconnected");
 
   // Clear the session storage upon logout
-  localStorage.removeItem("userLoggedIn");
+  localStorage.removeItem("adminEmail");
+  localStorage.removeItem("adminId");
+
+
 
   // Redirect to index.html after logout
   window.location.href = "index.html";

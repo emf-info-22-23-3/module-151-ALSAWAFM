@@ -162,6 +162,7 @@ function modifyNote(noteId, title, message, date, time, fk_category,fk_admin, su
 }
 
 
+
 /**
  * Fetch all notes from the server.
  * @param {function} successCallback - Callback for success.
@@ -172,6 +173,26 @@ function getNotes(successCallback, errorCallback) {
     type: "GET",
     dataType: "xml",
     url: BASE_URL + "main.php?action=getNotes",
+    success: successCallback,
+    error: errorCallback
+  });
+}
+
+/**
+ * Function to increment the like count for a specific note.
+ * @param {string} pk_note - The ID of the note.
+ * @param {function} successCallback - Callback function for success.
+ * @param {function} errorCallback - Callback function for error.
+ */
+function incrementLike(pk_note, successCallback, errorCallback) {
+  $.ajax({
+    type: "POST",
+    dataType: "xml",
+    url: BASE_URL + "main.php",
+    data: {
+      action: 'incrementLike',
+      pk_note: pk_note
+    },
     success: successCallback,
     error: errorCallback
   });
