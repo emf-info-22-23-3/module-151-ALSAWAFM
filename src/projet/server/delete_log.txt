@@ -4,3 +4,17 @@ Params: Array
     [0] => updateTitel
 )
 
+Query: DELETE FROM t_note WHERE title IN (?,?)
+Params: Array
+(
+    [0] => bgbggb
+    [1] => fff
+)
+
+Query: DELETE FROM t_note WHERE title IN (?,?)
+Params: Array
+(
+    [0] => r44rr434
+    [1] => 34r4r4r3r4r4343r
+)
+

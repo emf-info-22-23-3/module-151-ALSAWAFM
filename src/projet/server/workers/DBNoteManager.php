@@ -80,6 +80,7 @@ public function GetCategories()
 		$query = "INSERT INTO t_note (title, message , date,time,fk_category) values(:title, :message, :date,:time, :fk_category)";
 		$params = array('title' => $title, 'message' => $message, 'date' => $date, 'time' => $time, 'fk_category' => $fk_category);
 		$res = connexion::getInstance()->ExecuteQuery($query, $params);
+
 		return connexion::getInstance()->GetLastId('t_note');
 	}
 

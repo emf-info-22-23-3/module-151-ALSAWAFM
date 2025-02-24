@@ -124,6 +124,12 @@ function removeDeletedNotesFromUI(deletedNotes) {
  * "Start" method called after the page is fully loaded.
  */
 $(document).ready(function () {
+
+  if (!localStorage.getItem("userLoggedIn")) {  // Using sessionStorage to track login state
+    window.location.href = "index.html";  // Redirect to index.html if not logged in
+  }
+
+  
   // Load the services script and then the notes
   $.getScript("javascripts/services/servicesHttp.js", function () {
     console.log("servicesHttp.js loaded!");
@@ -136,4 +142,12 @@ $(document).ready(function () {
   $('#modify-btn').click(function() {
     window.location.href = 'modifyNote.html'; // Navigate to modifyNote.html when clicked
   });
+
+
+
+
+
+
+
+
 });

@@ -110,14 +110,15 @@ function updateNote() {
     time,
     category,
     function (response) {
+      console.log("Modify response:", response); // Log the response to debug
+
       if ($(response).find("result").text() === "true") {
         alert("Note modified successfully!");
         loadNotes(); // Refresh the note list
-        
-        loadNotes(); // Refresh z
+
         // Wait for notes to reload, then re-select the modified note
         setTimeout(() => {
-          $("#note-select").val(noteId).change(); 
+          $("#note-select").val(noteId).change();
         }, 500);
       } else {
         alert("Error modifying note.");
@@ -128,6 +129,7 @@ function updateNote() {
     }
   );
 }
+
 
 
 /**

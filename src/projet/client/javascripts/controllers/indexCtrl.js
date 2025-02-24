@@ -73,6 +73,10 @@ function chargerNotesError(request, status, error) {
  */
 $(document).ready(function () {
 
+  if (localStorage.getItem("userLoggedIn")) {
+    window.location.href = "admin.html";
+  }
+
   // Call the function to load notes when the page is ready
   $.getScript("javascripts/services/servicesHttp.js", function () {
     console.log("servicesHttp.js loaded!");

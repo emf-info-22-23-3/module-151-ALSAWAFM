@@ -5,22 +5,30 @@
 
 // Success callback when login is successful
 function connectSuccess(data, text, jqXHR) {
-  console.log("chargerNotesSuccess called");
-  console.log(data);
-
+  console.log("Login successful:", data);
 
   if ($(data).find("result").text() == 'true') {
     alert("Login successful");
-    // You can redirect or load the user dashboard after login
-    window.location.href = "admin.html";  // For example, redirect to a dashboard page
+
+    // Store the login state in sessionStorage (or localStorage)
+    localStorage.setItem("userLoggedIn", true);
+
+    // Redirect to admin.html
+    window.location.href = "admin.html";
   } else {
     alert("Login failed. Incorrect email or password.");
   }
 }
 
+// Disconnect the user (logout)
 function disconnectSuccess(data, text, jqXHR) {
-  alert("Utilisateur déconnecté");
-  window.location.href = "index.html";  // Redirect to index.html
+  alert("User disconnected");
+
+  // Clear the session storage upon logout
+  localStorage.removeItem("userLoggedIn");
+
+  // Redirect to index.html after logout
+  window.location.href = "index.html";
 }
 
 /**
@@ -57,8 +65,8 @@ $(document).ready(function () {
     connect(email, password, connectSuccess, CallbackError);
   });
 
-butDisconnect.click(function(event) {
+  butDisconnect.click(function (event) {
     disconnect(disconnectSuccess, CallbackError);
-});
+  });
 
 });
