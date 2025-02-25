@@ -1,4 +1,5 @@
-var BASE_URL = "http://localhost:8080/projet/server/";
+var BASE_URL = "https://alsawafm.emf-informatique.ch/module-151-M4ZENN/projet/server/";
+//For localhost: var BASE_URL = "http://localhost:8080/projet/server/";
 
 /**
  * Fetch notes from the server.
