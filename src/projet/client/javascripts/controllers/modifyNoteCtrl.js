@@ -1,9 +1,17 @@
+/*
+ * Controller for the "modifyNote.html" view
+ */
+
+/**
+ * This function is called when the page is fully loaded. It loads the notes and categories
+ * into the respective dropdowns and sets up event handlers for changing notes and submitting the form.
+ */
 $(document).ready(function () {
   $.getScript("javascripts/services/servicesHttp.js", function () {
     console.log("servicesHttp.js loaded!");
     
-    loadNotes(); // Load notes into the dropdown
-    loadCategories(); // Load categories into the dropdown
+    loadNotes(); 
+    loadCategories(); 
 
     $("#note-select").off("change").on("change", function () {
       var selectedNoteId = $(this).val();
@@ -98,9 +106,9 @@ function sanitizeInput(input) {
 }
 
 /**
- * Escape HTML before displaying to prevent XSS attacks.
+ * Escape HTML entities before displaying to prevent XSS attacks.
  * @param {string} str - The string to escape.
- * @return {string} - Escaped HTML string.
+ * @return {string} - The escaped HTML string.
  */
 function escapeHtmlEntities(str) {
   return str.replace(/&/g, "&amp;")
@@ -113,7 +121,7 @@ function escapeHtmlEntities(str) {
 /**
  * Decode escaped HTML entities (for displaying saved notes).
  * @param {string} input - The HTML-escaped string.
- * @return {string} - Decoded string.
+ * @return {string} - The decoded string.
  */
 function decodeHtmlEntities(input) {
   var tempDiv = document.createElement("div");
@@ -133,7 +141,6 @@ function updateNote() {
   var time = new Date().toTimeString().split(" ")[0];
   var adminId = localStorage.getItem("adminId");
 
-
   if (!noteId || !title || !message || !category) {
     alert("Please fill in all fields.");
     return;
@@ -151,7 +158,6 @@ function updateNote() {
     time: time,
     category: category,
     adminId: adminId
-
   });
 
   modifyNote(
@@ -179,7 +185,6 @@ function updateNote() {
     },
     function (jqXHR, textStatus, errorThrown) {
       console.error("Modify note failed:", textStatus, errorThrown);
-
       alert("Error modifying note.");
     }
   );

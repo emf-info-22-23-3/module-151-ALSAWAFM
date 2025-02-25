@@ -1,3 +1,7 @@
+/*
+ * Controller for the "newNote.html" view
+ */
+
 /**
  * Fetch categories from the server and populate the dropdown.
  */
@@ -46,6 +50,7 @@ function escapeHtmlEntities(str) {
 
 /**
  * Securely creates a text note while preventing HTML injection.
+ * @returns {Object|null} - The note data object or null if validation fails.
  */
 function createTextNote() {
   var title = $("input[name='title']").val().trim();
@@ -66,6 +71,7 @@ function createTextNote() {
 
 /**
  * Handles the click event on the "Publish note" button.
+ * @param {Event} e - The event object.
  */
 function handlePublishNoteClick(e) {
   e.preventDefault();
@@ -78,14 +84,6 @@ function handlePublishNoteClick(e) {
   var now = new Date();
   var currentDate = now.toISOString().split("T")[0]; // YYYY-MM-DD
   var currentTime = now.toTimeString().split(" ")[0]; // HH:MM:SS
-
-  console.log("Sending data to addNote:", {
-    title: noteData.title,
-    message: noteData.message,
-    date: currentDate,
-    time: currentTime,
-    category: noteData.fk_category
-  });
 
   addNote(
     noteData.title,

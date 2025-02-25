@@ -1,17 +1,11 @@
-/*
- * Couche de services HTTP (worker).
- *
- */
-
 var BASE_URL = "http://localhost:8080/projet/server/";
 
 /**
- * Fonction permettant de demander la liste des notes au serveur.
- * @param {type} Fonction de callback lors du retour avec succès de l'appel.
- * @param {type} Fonction de callback en cas d'erreur.
+ * Fetch notes from the server.
+ * @param {function} successCallback - Called on success.
+ * @param {function} errorCallback - Called on error.
  */
 function chargerNotes(successCallback, errorCallback) {
-
   $.ajax({
     type: "GET",
     dataType: "xml",
@@ -22,75 +16,74 @@ function chargerNotes(successCallback, errorCallback) {
 }
 
 /**
- * Fonction permettant de charger les données d'équipe.
- * @param {type} teamid, id de l'équipe dans laquelle trouver les joueurs
- * @param {type} Fonction de callback lors du retour avec succès de l'appel.
- * @param {type} Fonction de callback en cas d'erreur.
+ * Authenticate a user with email and password.
+ * @param {string} email - User's email address.
+ * @param {string} password - User's password.
+ * @param {function} successCallback - Called on success.
+ * @param {function} errorCallback - Called on error.
  */
 function connect(email, password, successCallback, errorCallback) {
   $.ajax({
-      type: "POST",
-      dataType: "xml",
-      url: BASE_URL+ "workers/DBUserManager.php",
-      data: {
-        action: 'connect',
-        email: email,
-        password: password
-    },
-          success: successCallback,
-      error: errorCallback
-  });
-}
-
-/**
-* Fonction permettant de charger les données d'équipe.
-* @param {type} teamid, id de l'équipe dans laquelle trouver les joueurs
-* @param {type} Fonction de callback lors du retour avec succès de l'appel.
-* @param {type} Fonction de callback en cas d'erreur.
-*/
-function disconnect(successCallback, errorCallback) {
-  $.ajax({
-      type: "POST",
-      dataType: "xml",
-      url: BASE_URL+ "workers/DBUserManager.php",
-      data: 'action=disconnect',
-      success: successCallback,
-      error: errorCallback
-  });
-}
-
-
-
-/**
- * Fonction permettant de demander la liste des notes au serveur.
- * @param {type} Fonction de callback lors du retour avec succès de l'appel.
- * @param {type} Fonction de callback en cas d'erreur.
- */
-function deleteNotes(selectedNotes, successCallback, errorCallback) {
-
-  $.ajax({
-    type: "DELETE",
+    type: "POST",
     dataType: "xml",
-    url: BASE_URL + "main.php",
-    data:{ titels: selectedNotes },
+    url: BASE_URL + "workers/DBUserManager.php",
+    data: {
+      action: 'connect',
+      email: email,
+      password: password
+    },
     success: successCallback,
     error: errorCallback
   });
 }
 
 /**
- * Function to add a new note.
- * @param {string} title - Title of the note.
- * @param {string} message - Message of the note.
- * @param {string} date - Date for the note.
- * @param {string} fk_category - The category of the note.
+ * Disconnect the user.
  * @param {function} successCallback - Called on success.
  * @param {function} errorCallback - Called on error.
  */
-function addNote(title, message, date,time, fk_category, successCallback, errorCallback) {
+function disconnect(successCallback, errorCallback) {
   $.ajax({
     type: "POST",
-    dataType: "xml",  // Expecting a valid XML response from the server.
+    dataType: "xml",
+    url: BASE_URL + "workers/DBUserManager.php",
+    data: 'action=disconnect',
+    success: successCallback,
+    error: errorCallback
+  });
+}
+
+/**
+ * Delete selected notes.
+ * @param {Array} selectedNotes - List of note IDs to delete.
+ * @param {function} successCallback - Called on success.
+ * @param {function} errorCallback - Called on error.
+ */
+function deleteNotes(selectedNotes, successCallback, errorCallback) {
+  $.ajax({
+    type: "DELETE",
+    dataType: "xml",
+    url: BASE_URL + "main.php",
+    data: { titels: selectedNotes },
+    success: successCallback,
+    error: errorCallback
+  });
+}
+
+/**
+ * Add a new note to the server.
+ * @param {string} title - The note's title.
+ * @param {string} message - The note's message.
+ * @param {string} date - The note's date.
+ * @param {string} time - The note's time.
+ * @param {number} fk_category - The note's category ID.
+ * @param {function} successCallback - Called on success.
+ * @param {function} errorCallback - Called on error.
+ */
+function addNote(title, message, date, time, fk_category, successCallback, errorCallback) {
+  $.ajax({
+    type: "POST",
+    dataType: "xml",
     url: BASE_URL + "main.php",
     data: {
       title: title,
@@ -104,31 +97,26 @@ function addNote(title, message, date,time, fk_category, successCallback, errorC
   });
 }
 
-function attachEventHandlers() {
-  $(".publish-btn").on("click", handlePublishNoteClick);
-}
-
 /**
- * Fetch categories from the database.
- * @param {function} successCallback - Callback function for success.
- * @param {function} errorCallback - Callback function for error.
+ * Fetch categories from the server.
+ * @param {function} successCallback - Called on success.
+ * @param {function} errorCallback - Called on error.
  */
 function getCategories(successCallback, errorCallback) {
   $.ajax({
-      type: "GET",
-      dataType: "xml",
-      url: BASE_URL + "main.php?action=getCategories",
-      success: successCallback,
-      error: errorCallback
+    type: "GET",
+    dataType: "xml",
+    url: BASE_URL + "main.php?action=getCategories",
+    success: successCallback,
+    error: errorCallback
   });
 }
 
-
 /**
- * Fetch a specific note's details.
+ * Fetch the details of a specific note.
  * @param {string} noteId - The ID of the note.
- * @param {function} successCallback - Callback for success.
- * @param {function} errorCallback - Callback for error.
+ * @param {function} successCallback - Called on success.
+ * @param {function} errorCallback - Called on error.
  */
 function getNoteDetails(noteId, successCallback, errorCallback) {
   $.ajax({
@@ -142,15 +130,17 @@ function getNoteDetails(noteId, successCallback, errorCallback) {
 
 /**
  * Modify an existing note.
- * @param {number} noteId - The ID of the note.
+ * @param {number} noteId - The ID of the note to modify.
  * @param {string} title - The updated title.
  * @param {string} message - The updated message.
  * @param {string} date - The updated date.
+ * @param {string} time - The updated time.
  * @param {number} fk_category - The updated category.
- * @param {function} successCallback - Callback for success.
- * @param {function} errorCallback - Callback for error.
+ * @param {number} fk_admin - The ID of the admin modifying the note.
+ * @param {function} successCallback - Called on success.
+ * @param {function} errorCallback - Called on error.
  */
-function modifyNote(noteId, title, message, date, time, fk_category,fk_admin, successCallback, errorCallback) {
+function modifyNote(noteId, title, message, date, time, fk_category, fk_admin, successCallback, errorCallback) {
   $.ajax({
     type: "PUT",
     dataType: "xml",
@@ -161,12 +151,10 @@ function modifyNote(noteId, title, message, date, time, fk_category,fk_admin, su
   });
 }
 
-
-
 /**
  * Fetch all notes from the server.
- * @param {function} successCallback - Callback for success.
- * @param {function} errorCallback - Callback for error.
+ * @param {function} successCallback - Called on success.
+ * @param {function} errorCallback - Called on error.
  */
 function getNotes(successCallback, errorCallback) {
   $.ajax({
@@ -179,10 +167,10 @@ function getNotes(successCallback, errorCallback) {
 }
 
 /**
- * Function to increment the like count for a specific note.
- * @param {string} pk_note - The ID of the note.
- * @param {function} successCallback - Callback function for success.
- * @param {function} errorCallback - Callback function for error.
+ * Increment the like count for a specific note.
+ * @param {string} pk_note - The ID of the note to like.
+ * @param {function} successCallback - Called on success.
+ * @param {function} errorCallback - Called on error.
  */
 function incrementLike(pk_note, successCallback, errorCallback) {
   $.ajax({

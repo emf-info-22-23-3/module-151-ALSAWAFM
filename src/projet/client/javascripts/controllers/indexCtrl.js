@@ -3,33 +3,32 @@
  */
 
 /**
- * Method called when the list of notes is successfully returned
- * @param {type} data
- * @param {type} text
- * @param {type} jqXHR
- * @returns {undefined}
+ * This function is called when the list of notes is successfully returned from the server.
+ * It processes and displays the notes by creating note cards and appending them to the grid.
+ * 
+ * @param {Object} data - The raw data returned from the server, expected to be in XML format.
+ * @param {string} text - The status text returned from the server (not used).
+ * @param {Object} jqXHR - The jQuery XMLHttpRequest object.
  */
-
 function chargerNotesSuccess(data, text, jqXHR) {
   console.log("chargerNotesSuccess called");
-  console.log("Data: ", data);  // Log the raw response to verify if it's correct
+  console.log("Data: ", data); 
 
   var notesGrid = document.getElementById("notes-grid"); // Get the container for notes
   var templateCard = document.querySelector(".note-card.template-card"); // Get the template card
 
-  // Loop through all notes in the XML
+  // Loop through all notes in the XML data
   $(data).find("note").each(function () {
-    var title = $(this).find("title").text(); // Get the title of the note
-    var message = $(this).find("message").text(); // Get the message of the note
-    var date = $(this).find("date").text(); // Get the date of the note
-    var time = $(this).find("time").text(); // Get the date of the note
-    var likes = $(this).find("likes").text(); // Get the date of the note
-    var pk_note = $(this).find("pk_note").text(); // Get the primary key of the note
-
+    var title = $(this).find("title").text();  
+    var message = $(this).find("message").text(); 
+    var date = $(this).find("date").text();     
+    var time = $(this).find("time").text();       
+    var likes = $(this).find("likes").text(); 
+    var pk_note = $(this).find("pk_note").text(); 
 
     // Clone the template card and fill it with data
     var noteCard = templateCard.cloneNode(true); // Clone the template
-    noteCard.style.display = "block"; // Make it visible
+    noteCard.style.display = "block";              // Make it visible
 
     // Update the card with the note's data
     noteCard.querySelector(".note-title").textContent = title;
@@ -57,30 +56,32 @@ function chargerNotesSuccess(data, text, jqXHR) {
 }
 
 /**
- * Method called in case of an error while reading the notes
- * @param {type} request
- * @param {type} status
- * @param {type} error
- * @returns {undefined}
+ * This function is called in case of an error while reading the notes.
+ * It shows an alert with the error message.
+ *
+ * @param {Object} request - The jqXHR object containing the response.
+ * @param {string} status - The status of the request.
+ * @param {string} error - The error message returned from the server.
  */
 function chargerNotesError(request, status, error) {
   alert("Error loading notes: " + error);
 }
 
-
 /**
- * "Start" method called after the page is fully loaded
+ * This is the "start" method called after the page has fully loaded.
+ * It checks if the admin is already logged in and redirects accordingly.
+ * It also loads the services script and fetches the notes from the server.
  */
 $(document).ready(function () {
 
   var adminEmail = localStorage.getItem("adminEmail");
-    var adminId = localStorage.getItem("adminId");
+  var adminId = localStorage.getItem("adminId");
 
-    if (adminEmail && adminId) {  // Check if admin is already logged in
-        window.location.href = "admin.html";
-    }
+  if (adminEmail && adminId) {  
+    window.location.href = "admin.html"; // Redirect to admin.html if logged in
+  }
 
-  // Call the function to load notes when the page is ready
+  // Load the services script and fetch the notes
   $.getScript("javascripts/services/servicesHttp.js", function () {
     console.log("servicesHttp.js loaded!");
     chargerNotes(chargerNotesSuccess, chargerNotesError); // Load notes from server

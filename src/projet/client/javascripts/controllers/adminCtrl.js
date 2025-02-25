@@ -1,31 +1,33 @@
 /*
- * Controller for the "index.html" view
+ * Controller for the "admin.html" view
  */
 
 /**
- * Method called when the list of notes is successfully returned
+ * This function is called when the list of notes is successfully returned from the server.
+ * It processes and displays the notes by creating note cards and appending them to the grid.
+ *
+ * @param {Object} data - The raw data returned from the server, expected to be in XML format.
+ * @param {string} text - The status text returned from the server (not used).
+ * @param {Object} jqXHR - The jQuery XMLHttpRequest object.
  */
 function chargerNotesSuccess(data, text, jqXHR) {
   console.log("chargerNotesSuccess called");
-  console.log("Data: ", data);  // Log the raw response to verify if it's correct
+  console.log("Data: ", data);  
 
-  var notesGrid = document.getElementById("notes-grid"); // Get the container for notes
-  var templateCard = document.querySelector(".note-card.template-card"); // Get the template card
+  var notesGrid = document.getElementById("notes-grid"); 
+  var templateCard = document.querySelector(".note-card.template-card"); 
 
   // Clear any previously appended notes (except the template)
   $(".note-card").not(".template-card").remove();
 
-  // Loop through all notes in the XML
+  // Loop through all notes in the XML data
   $(data).find("note").each(function () {
-    var title = $(this).find("title").text();   // Get the title of the note
-    var message = $(this).find("message").text(); // Get the message of the note
-    var date = $(this).find("date").text();       // Get the date of the note
-    var time = $(this).find("time").text();       // Get the date of the note
-    var likes = $(this).find("likes").text(); // Get the date of the note
-    var pk_note = $(this).find("pk_note").text(); // Get the primary key of the note
-
-
-
+    var title = $(this).find("title").text();  
+    var message = $(this).find("message").text(); 
+    var date = $(this).find("date").text();       
+    var time = $(this).find("time").text();       
+    var likes = $(this).find("likes").text(); 
+    var pk_note = $(this).find("pk_note").text(); 
 
     // Clone the template card and fill it with data
     var noteCard = templateCard.cloneNode(true); // Clone the template
@@ -52,7 +54,7 @@ function chargerNotesSuccess(data, text, jqXHR) {
       });
     });
 
-    // **Fix: Set the data attribute on the delete checkbox**
+    // Set the data attribute on the delete checkbox
     noteCard.querySelector(".delete-checkbox").setAttribute("data-title_note", title);
 
     // Append the new note card to the notes grid
@@ -60,23 +62,27 @@ function chargerNotesSuccess(data, text, jqXHR) {
   });
 }
 
-
-
 /**
- * Method called in case of an error while reading the notes
+ * This function is called in case of an error while reading the notes.
+ * It displays an error alert to inform the user.
+ *
+ * @param {Object} request - The jqXHR object containing the response.
+ * @param {string} status - The status of the request.
+ * @param {string} error - The error message returned from the server.
  */
 function chargerNotesError(request, status, error) {
   alert("Error loading notes: " + error);
 }
 
 /**
- * Handle the click event for deleting selected notes.
+ * This function handles the click event for deleting selected notes.
+ * It gathers all selected notes and deletes them, updating the UI accordingly.
  */
 function handleDeleteSelected() {
   var selectedNotes = getSelectedNotes();
 
   if (selectedNotes.length > 0) {
-    console.log("Deleting notes:", selectedNotes); // Debug: check selected notes
+    console.log("Deleting notes:", selectedNotes);
     deleteNotes(selectedNotes.join(','), function (response) {
       console.log("Notes deleted successfully", response);
       removeDeletedNotesFromUI(selectedNotes);
@@ -91,7 +97,8 @@ function handleDeleteSelected() {
 }
 
 /**
- * Get the list of selected notes by checking the checkboxes.
+ * This function collects the titles of the selected notes by checking the checkboxes.
+ * 
  * @returns {Array} The list of selected note titles.
  */
 function getSelectedNotes() {
@@ -106,7 +113,9 @@ function getSelectedNotes() {
 }
 
 /**
- * Remove deleted note cards from the UI.
+ * This function removes the deleted note cards from the UI.
+ * It ensures that only the deleted notes are removed based on the titles.
+ *
  * @param {Array} deletedNotes - List of note titles that were deleted.
  */
 function removeDeletedNotesFromUI(deletedNotes) {
@@ -121,36 +130,30 @@ function removeDeletedNotesFromUI(deletedNotes) {
 }
 
 /**
- * "Start" method called after the page is fully loaded.
+ * This is the "start" method that is called after the page has fully loaded.
+ * It sets up the page, checks if the admin is logged in, and attaches event handlers for interactions with notes.
  */
 $(document).ready(function () {
 
+  // Check if the admin is logged in by checking localStorage for email and id
   var adminEmail = localStorage.getItem("adminEmail");
   var adminId = localStorage.getItem("adminId");
 
-  if (!adminEmail || !adminId) {  // Check if admin is logged in
-      window.location.href = "index.html";  // Redirect to index.html if not logged in
+  if (!adminEmail || !adminId) {  // Redirect to index.html if not logged in
+      window.location.href = "index.html";
   }
 
-  
-  // Load the services script and then the notes
+  // Load the services script and then fetch the notes
   $.getScript("javascripts/services/servicesHttp.js", function () {
     console.log("servicesHttp.js loaded!");
-    chargerNotes(chargerNotesSuccess, chargerNotesError); // Load notes from server
+    chargerNotes(chargerNotesSuccess, chargerNotesError); // Load notes from the server
   });
   
-  // Attach the event handler for delete button
+  // Attach the event handler for the delete button
   $('#delete-selected-btn').click(handleDeleteSelected);
 
+  // Navigate to modifyNote.html when modify button is clicked
   $('#modify-btn').click(function() {
-    window.location.href = 'modifyNote.html'; // Navigate to modifyNote.html when clicked
+    window.location.href = 'modifyNote.html';
   });
-
-
-
-
-
-
-
-
 });
