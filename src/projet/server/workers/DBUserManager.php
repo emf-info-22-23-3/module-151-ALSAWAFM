@@ -1,7 +1,7 @@
 <?php
 // CORS
-header('Access-Control-Allow-Origin: http://localhost:8082');
-header('Access-Control-Allow-Credentials: true');
+ header('Access-Control-Allow-Origin: https://alsawafm.emf-informatique.ch');
+ header('Access-Control-Allow-Credentials: true');
 
 session_start();
 include_once('Connexion.php'); 
