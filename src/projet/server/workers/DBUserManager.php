@@ -84,6 +84,14 @@ class User {
     /**
      * Handles the user action based on the provided POST or GET request.
      */
+
+     public function isAuthenticated() {
+        if (isset($_SESSION['logged'])) {
+            return "<response><authenticated>true</authenticated></response>";
+        } else {
+            return "<response><authenticated>false</authenticated></response>";
+        }
+    }
     public function handleRequest() {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if ($_POST['action'] == "connect") {
@@ -101,8 +109,10 @@ class User {
 
         if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             if ($_GET['action'] == "getInfos") {
-                // Get user info
                 echo $this->getUserInfo();
+            }
+            if ($_GET['action'] == "isAuthenticated") {
+                echo $this->isAuthenticated();
             }
         }
     }

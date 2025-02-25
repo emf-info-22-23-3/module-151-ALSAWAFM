@@ -185,3 +185,18 @@ function incrementLike(pk_note, successCallback, errorCallback) {
     error: errorCallback
   });
 }
+
+/**
+ * Check if the user is authenticated.
+ * @param {function} successCallback - Called on success.
+ * @param {function} errorCallback - Called on error.
+ */
+function isAuthenticated(successCallback, errorCallback) {
+  $.ajax({
+    type: "GET",
+    url: BASE_URL + "workers/DBUserManager.php",
+    data: { action: "isAuthenticated" },
+    success: successCallback,
+    error: errorCallback
+  });
+}

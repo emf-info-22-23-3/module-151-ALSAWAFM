@@ -6,15 +6,18 @@ class Category {
   // Properties
   private $type;
   private $category_name;
+  private $description;
 
   /**
    * Constructor to initialize the category
    * @param string $type
    * @param string $category_name
+   * @param string $description
    */
-  public function __construct($type = '', $category_name = '') {
+  public function __construct($type = '', $category_name = '', $description = '') {
     $this->type = $type;
     $this->category_name = $category_name;
+    $this->description = $description;
   }
 
   /**
@@ -26,18 +29,34 @@ class Category {
   }
 
   /**
-   * Setter for the category description
+   * Setter for the category name
    * @param string $category_name
    */
-  public function setDescription($category_name) {
+  public function setCategoryName($category_name) {
     $this->category_name = $category_name;
+  }
+
+  /**
+   * Setter for the category description
+   * @param string $description
+   */
+  public function setDescription($description) {
+    $this->description = $description;
   }
 
   /**
    * Getter for the category type
    * @return string
    */
-  public function getCategory_name() {
+  public function getType() {
+    return $this->type;
+  }
+
+  /**
+   * Getter for the category name
+   * @return string
+   */
+  public function getCategoryName() {
     return $this->category_name;
   }
 
@@ -50,11 +69,11 @@ class Category {
   }
 
   /**
-   * Returns the category in text format (type + description)
+   * Returns the category in text format (type + name + description)
    * @return string
    */
   public function toString() {
-    return "Type: " . $this->type . "\nDescription: " . $this->category_name;
+    return "Type: " . $this->type . "\nCategory Name: " . $this->category_name . "\nDescription: " . $this->description;
   }
 }
 ?>

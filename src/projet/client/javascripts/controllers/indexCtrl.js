@@ -68,22 +68,44 @@ function chargerNotesError(request, status, error) {
 }
 
 /**
+ * This function is called in case of an error while reading the notes.
+ * It shows an alert with the error message.
+ *
+ * @param {Object} request - The jqXHR object containing the response.
+ * @param {string} status - The status of the request.
+ * @param {string} error - The error message returned from the server.
+ */
+function isAuthenticatedError(request, status, error) {
+  alert("Error checking authentication: " + error);
+  console.error("Error checking authentication.");
+}
+
+/**
+ * Success callback for authentication check on index.html.
+ * Redirects the user to admin.html if authenticated.
+ * 
+ * @param {Object} response - The server response.
+ */
+function authSuccessIndex(response) {
+  if ($(response).find("authenticated").text() === "true") {
+    window.location.href = "admin.html"; // Redirect if authenticated
+  }
+}
+
+/**
  * This is the "start" method called after the page has fully loaded.
  * It checks if the admin is already logged in and redirects accordingly.
  * It also loads the services script and fetches the notes from the server.
  */
 $(document).ready(function () {
 
-  var adminEmail = localStorage.getItem("adminEmail");
-  var adminId = localStorage.getItem("adminId");
-
-  if (adminEmail && adminId) {  
-    window.location.href = "admin.html"; // Redirect to admin.html if logged in
-  }
-
   // Load the services script and fetch the notes
   $.getScript("javascripts/services/servicesHttp.js", function () {
     console.log("servicesHttp.js loaded!");
     chargerNotes(chargerNotesSuccess, chargerNotesError); // Load notes from server
+
+        // Check authentication status
+        isAuthenticated(authSuccessIndex, isAuthenticatedError);
   });
+
 });
