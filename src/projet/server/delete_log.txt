@@ -32,3 +32,35 @@ Params: Array
     [2] => VVVD
 )
 
+Query: DELETE FROM t_note WHERE title IN (?)
+Params: Array
+(
+    [0] => vfdvdsfvv
+)
+
+Query: DELETE FROM t_note WHERE title IN (?,?,?,?,?,?,?,?)
+Params: Array
+(
+    [0] => Test
+    [1] => ssf
+    [2] => mjhh
+    [3] => rffrfrf
+    [4] => mumumumumumu
+    [5] => dededed
+    [6] => sxsx
+    [7] => rfferferf
+)
+
+Query: DELETE FROM t_note WHERE title IN (?)
+Params: Array
+(
+    [0] => Test 1
+)
+
+Query: DELETE FROM t_note WHERE title IN (?,?)
+Params: Array
+(
+    [0] => Grocery List
+    [1] => Workout Plan
+)
+

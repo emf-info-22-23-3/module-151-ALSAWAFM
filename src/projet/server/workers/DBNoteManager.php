@@ -21,7 +21,7 @@ class DBNoteManager
             $result .= '<note>';
             $result .= '<pk_note>' . htmlspecialchars($data['pk_note'], ENT_QUOTES, 'UTF-8') . '</pk_note>';
             $result .= '<title>' . htmlspecialchars($data['title'], ENT_QUOTES, 'UTF-8') . '</title>';
-            $result .= '<message>' . htmlspecialchars($data['message'], ENT_NOQUOTES, 'UTF-8') . '</message>';
+            $result .= '<message>' . htmlspecialchars($data['message'], ENT_QUOTES, 'UTF-8') . '</message>';
             $result .= '<date>' . htmlspecialchars($data['date'], ENT_QUOTES, 'UTF-8') . '</date>';
             $result .= '<time>' . htmlspecialchars($data['time'], ENT_QUOTES, 'UTF-8') . '</time>';
             $result .= '<likes>' . intval($data['likes']) . '</likes>';
@@ -135,7 +135,7 @@ class DBNoteManager
         $result = '<note>';
         $result .= '<pk_note>' . htmlspecialchars($data['pk_note'], ENT_QUOTES, 'UTF-8') . '</pk_note>';
         $result .= '<title>' . htmlspecialchars($data['title'], ENT_QUOTES, 'UTF-8') . '</title>';
-        $result .= '<message>' . htmlspecialchars($data['message'], ENT_NOQUOTES, 'UTF-8') . '</message>';
+        $result .= '<message>' . htmlspecialchars($data['message'], ENT_QUOTES, 'UTF-8') . '</message>';
         $result .= '<fk_category>' . htmlspecialchars($data['fk_category'], ENT_QUOTES, 'UTF-8') . '</fk_category>';
         $result .= '</note>';
 
