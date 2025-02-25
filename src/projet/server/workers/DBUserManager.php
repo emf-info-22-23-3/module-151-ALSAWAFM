@@ -1,4 +1,8 @@
 <?php
+// CORS
+header('Access-Control-Allow-Origin: http://localhost:8082');
+header('Access-Control-Allow-Credentials: true');
+
 session_start();
 include_once('Connexion.php'); 
 
@@ -87,9 +91,9 @@ class User {
 
      public function isAuthenticated() {
         if (isset($_SESSION['logged'])) {
-            return "<response><result>true</result></response>";
+            return "<response><authenticated>true</authenticated></response>";
         } else {
-            return "<response><result>false</result></response>";
+            return "<response><authenticated>false</authenticated></response>";
         }
     }
     public function handleRequest() {

@@ -1,5 +1,3 @@
-//var BASE_URL = "https://alsawafm.emf-informatique.ch/module-151-M4ZENN/projet/server/";
-//For localhost: 
 var BASE_URL = "http://localhost:8080/projet/server/";
 
 /**
@@ -194,18 +192,11 @@ function incrementLike(pk_note, successCallback, errorCallback) {
  * @param {function} errorCallback - Called on error.
  */
 function isAuthenticated(successCallback, errorCallback) {
-  // Proceed with the server-side authentication check
   $.ajax({
     type: "GET",
     url: BASE_URL + "workers/DBUserManager.php",
     data: { action: "isAuthenticated" },
-    success: function (response) {
-      if ($(response).find("authenticated").text() === "true") {
-        successCallback(response);
-      } else {
-        errorCallback();
-      }
-    },
-    error: errorCallback,
+    success: successCallback,
+    error: errorCallback
   });
 }

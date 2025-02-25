@@ -107,6 +107,5 @@ $(document).ready(function () {
         // Check authentication status
         isAuthenticated(authSuccessIndex, isAuthenticatedError);
   });
-  
 
 });
