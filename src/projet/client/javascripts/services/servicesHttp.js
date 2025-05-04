@@ -27,7 +27,7 @@ function connect(email, password, successCallback, errorCallback) {
   $.ajax({
     type: "POST",
     dataType: "xml",
-    url: BASE_URL + "workers/DBUserManager.php",
+    url: BASE_URL + "main.php",
     data: {
       action: 'connect',
       email: email,
@@ -47,7 +47,7 @@ function disconnect(successCallback, errorCallback) {
   $.ajax({
     type: "POST",
     dataType: "xml",
-    url: BASE_URL + "workers/DBUserManager.php",
+    url: BASE_URL + "main.php",
     data: 'action=disconnect',
     success: successCallback,
     error: errorCallback
@@ -195,7 +195,7 @@ function incrementLike(pk_note, successCallback, errorCallback) {
 function isAuthenticated(successCallback, errorCallback) {
   $.ajax({
     type: "GET",
-    url: BASE_URL + "workers/DBUserManager.php",
+    url: BASE_URL + "main.php",
     data: { action: "isAuthenticated" },
     success: successCallback,
     error: errorCallback

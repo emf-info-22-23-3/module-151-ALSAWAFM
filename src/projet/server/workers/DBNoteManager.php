@@ -18,7 +18,7 @@ class DBNoteManager
      * 
      * @return string Le contenu XML représentant toutes les notes.
      */
-    public function GetInXML()
+    public function getInXML()
     {
         $query = connexion::getInstance()->SelectQuery("SELECT * FROM t_note", []);
 
@@ -45,7 +45,7 @@ class DBNoteManager
      * 
      * @return string Le contenu XML représentant toutes les catégories.
      */
-    public function GetCategories()
+    public function getCategories()
     {
         $query = connexion::getInstance()->SelectQuery("SELECT pk_category, category_name FROM t_category", []);
 
@@ -74,7 +74,7 @@ class DBNoteManager
      * 
      * @return int L'identifiant de la note ajoutée.
      */
-    public function Add($title, $message, $date, $time, $fk_category)
+    public function addNote($title, $message, $date, $time, $fk_category)
     {
         $query = "INSERT INTO t_note (title, message, date, time, fk_category) 
                   VALUES (:title, :message, :date, :time, :fk_category)";
@@ -105,7 +105,7 @@ class DBNoteManager
      * 
      * @return void
      */
-    public function Update($title, $message, $date, $time, $fk_category, $pk_note, $fk_admin)
+    public function updateNote($title, $message, $date, $time, $fk_category, $pk_note, $fk_admin)
     {
         $query = "UPDATE t_note 
                   SET title = :title, message = :message, date = :date, time = :time, fk_category = :fk_category, fk_admin = :fk_admin  
@@ -138,7 +138,7 @@ class DBNoteManager
      * 
      * @return string 'True' si les notes ont été supprimées, sinon 'False'.
      */
-    public function Delete($titles)
+    public function deleteNote($titles)
     {
         if (empty($titles)) {
             return 'False';
@@ -160,7 +160,7 @@ class DBNoteManager
      * 
      * @return string Le contenu XML représentant la note ou une erreur si la note n'est pas trouvée.
      */
-    public function GetSingleNote($pk_note)
+    public function getSingleNote($pk_note)
     {
         $query = connexion::getInstance()->SelectQuery("SELECT * FROM t_note WHERE pk_note = ?", [$pk_note]);
 
@@ -188,7 +188,7 @@ class DBNoteManager
      * 
      * @return bool Retourne true si le nombre de "likes" a été incrémenté avec succès, sinon false.
      */
-    public function IncrementLike($pk_note)
+    public function incrementLike($pk_note)
     {
         $query = "UPDATE t_note SET likes = likes + 1 WHERE pk_note = :pk_note";
         $params = ['pk_note' => $pk_note];

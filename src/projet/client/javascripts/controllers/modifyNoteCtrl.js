@@ -3,33 +3,6 @@
  */
 
 /**
- * This function is called when the page is fully loaded. It loads the notes and categories
- * into the respective dropdowns and sets up event handlers for changing notes and submitting the form.
- */
-$(document).ready(function () {
-  $.getScript("javascripts/services/servicesHttp.js", function () {
-    console.log("servicesHttp.js loaded!");
-    
-    loadNotes(); 
-    loadCategories(); 
-
-    $("#note-select").off("change").on("change", function () {
-      var selectedNoteId = $(this).val();
-      if (selectedNoteId) {
-        loadNoteDetails(selectedNoteId);
-      } else {
-        clearForm();
-      }
-    });
-
-    $(".note-form").off("submit").on("submit", function (event) {
-      event.preventDefault();
-      updateNote();
-    });
-  });
-});
-
-/**
  * Load all notes into the select dropdown.
  */
 function loadNotes() {
@@ -198,3 +171,40 @@ function clearForm() {
   $("#note-message").val("");
   $("#category-select").val("");
 }
+
+/**
+ * This function is called when the page is fully loaded. It loads the notes and categories
+ * into the respective dropdowns and sets up event handlers for changing notes and submitting the form.
+ */
+$(document).ready(function () {
+  $.getScript("javascripts/services/servicesHttp.js", function () {
+    console.log("servicesHttp.js loaded!");
+
+    // ✅ Authentication check
+    isAuthenticated(function (response) {
+      if ($(response).find("authenticated").text() !== "true") {
+        window.location.href = "index.html";
+      } else {
+        loadNotes();
+        loadCategories();
+
+        $("#note-select").off("change").on("change", function () {
+          var selectedNoteId = $(this).val();
+          if (selectedNoteId) {
+            loadNoteDetails(selectedNoteId);
+          } else {
+            clearForm();
+          }
+        });
+
+        $(".note-form").off("submit").on("submit", function (event) {
+          event.preventDefault();
+          updateNote();
+        });
+      }
+    }, function () {
+      alert("Error checking authentication. Redirecting...");
+      window.location.href = "index.html";
+    });
+  });
+});
