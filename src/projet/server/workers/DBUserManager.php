@@ -1,6 +1,6 @@
 <?php
 // CORS setup should go in the API entry point, not here.
-include_once('connexion.php'); 
+include_once('Connexion.php'); 
 
 /**
  * DBUserManager handles login, logout, session, and user info.
