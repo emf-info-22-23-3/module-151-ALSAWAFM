@@ -51,7 +51,7 @@ function chargerNotesSuccess(data, text, jqXHR) {
         incrementLike(
           pk_note,
           function () {
-            // On success, update the like count in the UII
+            // On success, update the like count in the UI
             var likeCountElement = noteCard.querySelector(".like-count");
             var currentLikes = parseInt(likeCountElement.textContent);
             likeCountElement.textContent = currentLikes + 1;
