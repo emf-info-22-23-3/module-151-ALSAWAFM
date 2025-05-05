@@ -8,6 +8,7 @@ Gestionnaire de notes
 Une application web pour gérer les notes
 
 ### Informations de connexion
+URL: https://alsawafm.emf-informatique.ch/module-151-M4ZENN/projet/client/
 email: mazen.alsawaf@studentfr.ch
 mot de passe: emf
 
