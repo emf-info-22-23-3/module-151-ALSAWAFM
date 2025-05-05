@@ -120,13 +120,8 @@ class DBNoteManager
             'fk_admin' => $fk_admin
         ];
 
-        $res = connexion::getInstance()->ExecuteQuery($query, $params);
+        return connexion::getInstance()->ExecuteQuery($query, $params); // ✅ return result
 
-        header("Content-Type: text/xml");
-        echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
-        echo "<response>";
-        echo "<result>" . ($res > 0 ? "true" : "false") . "</result>";
-        echo "</response>";
     }
 
     /**

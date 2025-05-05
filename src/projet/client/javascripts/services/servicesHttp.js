@@ -87,6 +87,7 @@ function addNote(title, message, date, time, fk_category, successCallback, error
     dataType: "xml",
     url: BASE_URL + "main.php",
     data: {
+      action: "addNote",  // Add action parameter
       title: title,
       message: message,
       date: date,

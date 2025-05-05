@@ -93,14 +93,25 @@ function handleDeleteSelected() {
 
   if (selectedNotes.length > 0) {
     console.log("Deleting notes:", selectedNotes);
+    
     deleteNotes(
       selectedNotes.join(","),
       function (response) {
-        console.log("Notes deleted successfully", response);
-        removeDeletedNotesFromUI(selectedNotes);
-        alert("Selected notes deleted successfully!");
+        // Assuming the server responds with XML, check the <status> element
+        var status = $(response).find("status").text(); // Get the status from the response
+        if (status === "success") {
+          console.log("Notes deleted successfully", response);
+          removeDeletedNotesFromUI(selectedNotes);
+          alert("Selected notes deleted successfully!");
+        } else {
+          // If the status is "error", show an error message
+          var message = $(response).find("message").text() || "Error deleting notes.";
+          console.log("Error:", message);
+          alert(message);
+        }
       },
       function (jqXHR, textStatus, errorThrown) {
+        // Handle network or server error
         console.log("Error deleting notes:", errorThrown);
         alert("Error deleting selected notes. Please try again.");
       }
@@ -109,6 +120,8 @@ function handleDeleteSelected() {
     alert("No notes selected for deletion.");
   }
 }
+
+
 
 /**
  * This function collects the titles of the selected notes by checking the checkboxes.

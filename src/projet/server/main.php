@@ -2,7 +2,8 @@
 // Global headers
 header('Access-Control-Allow-Origin: https://alsawafm.emf-informatique.ch');
 header('Access-Control-Allow-Credentials: true');
-//Check if a session has been started
+
+// Start session if not already started
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
@@ -87,26 +88,63 @@ if (isset($_SERVER['REQUEST_METHOD'])) {
 
         // -------------------- PUT --------------------
         case 'PUT':
-            parse_str(file_get_contents("php://input"), $vars);
-            if (isset($vars['title'], $vars['message'], $vars['date'], $vars['fk_category'], $vars['fk_admin'], $vars['pk_note'])) {
-                echo $noteBD->updateNote($vars['title'], $vars['message'], $vars['date'], $vars['time'], $vars['fk_category'], $vars['pk_note'], $vars['fk_admin']);
+            // Make sure no output before this point (no echo or print statements)
+            if (isset($_SESSION['logged'])) {
+                parse_str(file_get_contents("php://input"), $vars);
+
+                if (isset($vars['title'], $vars['message'], $vars['date'], $vars['fk_category'], $vars['fk_admin'], $vars['pk_note'])) {
+                    $result = $noteBD->updateNote(
+                        $vars['title'], 
+                        $vars['message'], 
+                        $vars['date'], 
+                        $vars['time'], 
+                        $vars['fk_category'], 
+                        $vars['pk_note'], 
+                        $vars['fk_admin']
+                    );
+
+                    // Return a single XML response
+                    echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+
+                    if ($result) {
+                        echo "<response><status>success</status></response>"; // Success response
+                    } else {
+                        echo "<response><status>error</status><message>Failed to update note</message></response>"; // Error response
+                    }
+                } else {
+                    // Missing parameters
+                    echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+                    echo "<response><status>error</status><message>Missing parameters</message></response>";
+                }
             } else {
-                echo 'Paramètre pk_note, title, message, date, fk_category ou fk_admin manquant';
+                // Unauthorized access
+                echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+                echo "<response><status>error</status><message>Unauthorized</message></response>";
             }
             exit;
 
         // -------------------- DELETE --------------------
         case 'DELETE':
-            header("Content-Type: text/xml");
-            parse_str(file_get_contents("php://input"), $vars);
-            echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
-            if (!empty($vars['titels'])) {
-                $titlesArray = explode(',', $vars['titels']);
-                $result = $noteBD->deleteNote($titlesArray);
-                echo "<response><status>$result</status></response>";
+            if (isset($_SESSION['logged'])) {
+                header("Content-Type: text/xml");
+                parse_str(file_get_contents("php://input"), $vars);
+                echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+                if (!empty($vars['titels'])) {
+                    $titlesArray = explode(',', $vars['titels']);
+                    $result = $noteBD->deleteNote($titlesArray);
+                    if ($result) {
+                        echo "<response><status>success</status></response>";  // Deletion successful
+                    } else {
+                        echo "<response><status>error</status><message>Failed to delete notes</message></response>";  // Deletion failed
+                    }
+                } else {
+                    echo "<response><error>Paramètre titels manquant</error></response>";
+                }
             } else {
-                echo "<response><error>Paramètre titels manquant</error></response>";
+                echo "<response><error>Unauthorized</error></response>";  // If not authenticated
             }
             exit;
     }
 }
+
+?>

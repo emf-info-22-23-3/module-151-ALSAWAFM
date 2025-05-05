@@ -85,10 +85,10 @@ function sanitizeInput(input) {
  */
 function escapeHtmlEntities(str) {
   return str.replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#039;");
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
 }
 
 /**
@@ -105,6 +105,8 @@ function decodeHtmlEntities(input) {
 /**
  * Update an existing note securely.
  */
+// Frontend: Update note function
+// Update note function
 function updateNote() {
   var noteId = $("#note-select").val();
   var title = $("#note-title").val().trim();
@@ -133,6 +135,7 @@ function updateNote() {
     adminId: adminId
   });
 
+  // Call to the backend to update the note
   modifyNote(
     noteId,
     sanitizedTitle,
@@ -144,24 +147,34 @@ function updateNote() {
     function (response) {
       console.log("Modify response:", response); // Log the response to debug
 
-      if ($(response).find("result").text() === "true") {
-        alert("Note modified successfully!");
-        loadNotes(); // Refresh the note list
+      // Check the <status> element from the response XML
+      var status = $(response).find("status").text(); // Get status from the response
 
-        // Wait for notes to reload, then re-select the modified note
+      if (status === "success") {
+        console.log("Note modified successfully.");
+        loadNotes(); // Refresh the note list
         setTimeout(() => {
           $("#note-select").val(noteId).change();
         }, 500);
+        alert("Note modified successfully!");
       } else {
-        alert("Error modifying note.");
+        // If there is an error, get the error message from <message> in the response
+        var message = $(response).find("message").text() || "Error modifying note.";
+        console.log("Error:", message);
+        alert(message);
       }
     },
     function (jqXHR, textStatus, errorThrown) {
+      // Handle network or server error
       console.error("Modify note failed:", textStatus, errorThrown);
-      alert("Error modifying note.");
+      alert("Error modifying note. Please try again.");
     }
   );
 }
+
+
+
+
 
 /**
  * Clear form fields securely.

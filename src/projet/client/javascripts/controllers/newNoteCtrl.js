@@ -117,17 +117,7 @@ $(document).ready(function () {
   $.getScript("javascripts/services/servicesHttp.js", function () {
     console.log("servicesHttp.js loaded!");
 
-    // ✅ Authentication check
-    isAuthenticated(function (response) {
-      if ($(response).find("authenticated").text() !== "true") {
-        window.location.href = "index.html";
-      } else {
         fetchCategories();
         attachEventHandlers();
-      }
-    }, function () {
-      alert("Error checking authentication. Redirecting...");
-      window.location.href = "index.html";
-    });
   });
 });
